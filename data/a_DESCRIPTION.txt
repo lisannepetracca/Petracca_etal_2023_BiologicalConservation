@@ -1,0 +1,9 @@
+Data_for_IPM.RData -- has all wolf count data processed for use in IPM
+
+Spatial_Information.RData -- brings in information as to what hypothetical wolf territory IDs belong to each recovery region
+
+Projection_Inputs.RData -- has all outputs from the year 2020 in the base IPM for use in the projection model
+
+RSF_categorical_territory_selection_information.RData -- has information as to what territories will be selected (and at what probabilities) at each possible dispersal distance from each other territory using RSF surface
+
+Least_cost_territory_selection_information.RData -- has information as to what territory will be selected at each possible dispersal distance from each other territory using least cost path surface

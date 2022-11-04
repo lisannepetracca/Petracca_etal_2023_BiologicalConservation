@@ -1,0 +1,7 @@
+attraction_function -- at a given timestep, will place two wolves together if they are solo wolves in adjacent territories
+
+movement_function -- at a given timestep, will assign moving wolves to new territories (or keep them at original territories) based on dispersal distance and habitat suitability based on RSF output
+
+movement_function_singleLCP -- at a given timestep, will assign moving wolves to new territories (or keep them at original territories) based on dispersal distance and least cost path
+
+removals_function -- at a given timestep, will perform lethal removal of wolves from Eastern Washington recovery region given annual rate

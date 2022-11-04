@@ -1,0 +1,5 @@
+IPM_data_collection_period.R -- has full IPM summarizing wolf population from 2009-2020 (data collection period)
+
+Projection_model_leastcost_territory_selection.R -- has spatial projection model for projection period (2020-2070) using categorical RSF territory selection process
+
+Projection_model_RSF_territory_selection.R -- has spatial projection model for projection period (2020-2070) using least cost path territory selection process
