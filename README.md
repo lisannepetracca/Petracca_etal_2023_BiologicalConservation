@@ -1,8 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-This repo is to provide a general template for project structures, and is also a place for folks to place handy example scripts. 
+This repo details how to run the spatially-explicit projection model
+submitted to Ecological Applications by Petracca et al. 
 
-In general, READMeE's are a good place to include things like - what JAGS/NIMBLE/R version
-and OS did you run this code on. With what settings. How long did it
-take. How much juice did it take.
+The “scripts” section has three codes (described in a_DESCRIPTION.txt) –
+one to run the IPM for the data collection period (2009-2020) and two
+different versions of the projection model for the years 2020-2070. The
+latter scripts differ based on chosen territory selection method.
+
+The “data” section has all data (in .Rdata formatting) needed to run all
+models. See a_DESCRIPTION.txt for more.
+
+The “function” section has functions related to the individual-based
+movement model. These functions allow for attraction of lone wolves,
+lethal removals, and dispersal of wolves depending on chosen territory
+selection method. See a_DESCRIPTION.txt for more.
