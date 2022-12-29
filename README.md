@@ -1,6 +1,6 @@
 
 This repo details how to run the spatially-explicit projection model
-submitted to Ecological Applications by Petracca et al. 
+submitted to Journal of Animal Ecology by Petracca et al. 
 
 The “scripts” section has three codes (described in a_DESCRIPTION.txt) –
 one to run the IPM for the data collection period (2009-2020) and two
