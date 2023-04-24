@@ -14,7 +14,7 @@ sensitive nature. Interested parties should contact Donny Martorello at
 WDFW (<Donny.Martorello@dfw.wa.gov>).
 
 The “data” section has all data (in .Rdata formatting) needed to run all
-models. See a_DESCRIPTION.txt for more.
+spatially-explicit projection models. See a_DESCRIPTION.txt for more.
 
 The “function” section has functions related to the individual-based
 movement model. These functions allow for attraction of lone wolves,
