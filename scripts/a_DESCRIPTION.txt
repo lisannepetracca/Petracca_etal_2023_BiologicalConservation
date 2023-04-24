@@ -4,4 +4,4 @@ Projection_model_leastcost_territory_selection.R -- has spatial projection model
 
 Projection_model_RSF_territory_selection.R -- has spatial projection model for projection period (2020-2070) using least cost path territory selection process
 
-The folder "Preliminary_Analysis_Steps" contains four R scripts to (1) identify dispersal movements, (2) calculate mean territory size, (3) perform Resource Selection Function, and (4) identify the "best" territory at multiple distances from each territory using the RSF output
+The folder "Preliminary_Analysis_Steps" contains four R scripts to (1) identify dispersal movements, (2) calculate mean territory size, (3) perform Resource Selection Function, and (4) identify the "best" territory at multiple distances from each territory using the RSF output. A note that GPS collar data for wolves are sensitive and therefore not provided in this repository. Interested parties should contact Donny Martorello at WDFW.
