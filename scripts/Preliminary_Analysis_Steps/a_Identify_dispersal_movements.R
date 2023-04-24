@@ -303,7 +303,7 @@ keep <- list(c(1:5), c(1:3), c(1:4), c(1:5), c(1:6),
              c(1:5), c(1:6), c(2:4), c(1:6), c(1:2),
              c(1,2,4), c(2,3), c(2:4))
 
-#create df of "HR-only" trajectories 
+#create df of "HR-only" trajectories (still has 19f for now)
 ltraj_occupied <- df_occupied <- list()
 for (i in 1:78) {
   ltraj_occupied[[i]] <- paths_occupied[[i]][c(keep[[i]])]
@@ -374,6 +374,12 @@ write.csv(movers_df, "C:/Your_Directory/movement_data_for_distancecalc.csv")
 library(tidyverse)
 movements <- read.csv("C:/Your_Directory/movement_data_for_distancecalc.csv", header=T)
 summary <- read.csv("C:/Your_Directory/movement_data_for_survival.csv", header=T)
+
+#first we need to remove the three OR wolves bc we aren't interested in those distances
+summary <- summary %>% filter(!burst %in% c("OR15m.1_3", "OR35f.1_1",
+                                            "OR49f.1_1", "OR49f.1_5"))
+movements <- movements %>% filter(!burst %in% c("OR15m.1_3", "OR35f.1_1",
+                                                "OR49f.1_1", "OR49f.1_5"))
 
 #convert to sf and take first/last coordinate by wolf
 library(sf)
