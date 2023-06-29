@@ -109,6 +109,8 @@ summary(nondispdata_nogaps)
 alldata_nogaps <- rbind(ld(dispdata_nogaps), ld(nondispdata_nogaps))
 alldata_nogaps$id <- alldata_nogaps$burst
 
+alldata_nogaps <- dl(alldata_nogaps)
+
 ######------ DOING ALL DATA TOGETHER ------######
 
 #important to have regularized trajectories for FPT, so let's do that with all data
