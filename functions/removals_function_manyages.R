@@ -71,7 +71,7 @@ get.removals <- function(n.wolves.all.fxn, n.wolves.EWash.fxn, removal_rate){
     
   } #close i loop
   
-  n.wolves.EWash.fxn[n.wolves.EWash.fxn==-1] <- 0
+  n.wolves.EWash.fxn[n.wolves.EWash.fxn<0] <- 0
 
   #to bring back to model    
 return (n.wolves.EWash.fxn)    
