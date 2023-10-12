@@ -1,4 +1,4 @@
-get.move <- function(n.settlers.for.fxn,n.res,site_check,array_probs,array_siteID){
+get.move <- function(N.settlers.for.fxn,n.res,site_check,array_probs,array_siteID){
 
 #as of January 31 2022, immigrants are no longer in this function at all
 #we have also removed counting of solo vs. non-solo settlers
@@ -11,7 +11,7 @@ get.move <- function(n.settlers.for.fxn,n.res,site_check,array_probs,array_siteI
 #settlers pull a dispersal distance and a least cost path
 #if a success, the settlers are assigned the new territory; otherwise settlers sent home
 
-Nsamples <- dim(n.settlers.for.fxn)[1]
+Nsamples <- dim(N.settlers.for.fxn)[1]
 
 ####################################################################################################
 #                                                                                                  #
@@ -36,24 +36,28 @@ help.vector.10 <- help.vector.11 <- help.vector.12 <- help.vector.13 <- help.vec
 
   #this is essentially when this becomes an IBM
   for(s in 1:224){
-    help.vector.2 <- c(help.vector.2,rep(s,n.settlers.for.fxn[i,1,s])) #repeat site number for number of age 2 settlers
-    help.vector.3 <- c(help.vector.3,rep(s,n.settlers.for.fxn[i,2,s])) #repeat site number for number of age 3 settlers
-    help.vector.4 <- c(help.vector.4,rep(s,n.settlers.for.fxn[i,3,s])) #repeat site number for number of age 4 settlers
-    help.vector.5 <- c(help.vector.5,rep(s,n.settlers.for.fxn[i,4,s])) #repeat site number for number of age 5 settlers
-    help.vector.6 <- c(help.vector.6,rep(s,n.settlers.for.fxn[i,5,s])) #repeat site number for number of age 6 settlers
-    help.vector.7 <- c(help.vector.7,rep(s,n.settlers.for.fxn[i,6,s])) #repeat site number for number of age 7 settlers
-    help.vector.8 <- c(help.vector.8,rep(s,n.settlers.for.fxn[i,7,s])) #repeat site number for number of age 8 settlers
-    help.vector.9 <- c(help.vector.9,rep(s,n.settlers.for.fxn[i,8,s])) #repeat site number for number of age 9 settlers
-    help.vector.10 <- c(help.vector.10,rep(s,n.settlers.for.fxn[i,9,s])) #repeat site number for number of age 10 settlers
-    help.vector.11 <- c(help.vector.11,rep(s,n.settlers.for.fxn[i,10,s])) #repeat site number for number of age 11 settlers
-    help.vector.12 <- c(help.vector.12,rep(s,n.settlers.for.fxn[i,11,s])) #repeat site number for number of age 12 settlers
-    help.vector.13 <- c(help.vector.13,rep(s,n.settlers.for.fxn[i,12,s])) #repeat site number for number of age 13 settlers
-    help.vector.14 <- c(help.vector.14,rep(s,n.settlers.for.fxn[i,13,s])) #repeat site number for number of age 14 settlers
-    help.vector.15 <- c(help.vector.15,rep(s,n.settlers.for.fxn[i,14,s])) #repeat site number for number of age 15 settlers
+    help.vector.2 <- c(help.vector.2,rep(s,N.settlers.for.fxn[i,1,s])) #repeat site number for number of age 2 settlers
+    help.vector.3 <- c(help.vector.3,rep(s,N.settlers.for.fxn[i,2,s])) #repeat site number for number of age 3 settlers
+    help.vector.4 <- c(help.vector.4,rep(s,N.settlers.for.fxn[i,3,s])) #repeat site number for number of age 4 settlers
+    help.vector.5 <- c(help.vector.5,rep(s,N.settlers.for.fxn[i,4,s])) #repeat site number for number of age 5 settlers
+    help.vector.6 <- c(help.vector.6,rep(s,N.settlers.for.fxn[i,5,s])) #repeat site number for number of age 6 settlers
+    help.vector.7 <- c(help.vector.7,rep(s,N.settlers.for.fxn[i,6,s])) #repeat site number for number of age 7 settlers
+    help.vector.8 <- c(help.vector.8,rep(s,N.settlers.for.fxn[i,7,s])) #repeat site number for number of age 8 settlers
+    help.vector.9 <- c(help.vector.9,rep(s,N.settlers.for.fxn[i,8,s])) #repeat site number for number of age 9 settlers
+    help.vector.10 <- c(help.vector.10,rep(s,N.settlers.for.fxn[i,9,s])) #repeat site number for number of age 10 settlers
+    help.vector.11 <- c(help.vector.11,rep(s,N.settlers.for.fxn[i,10,s])) #repeat site number for number of age 11 settlers
+    help.vector.12 <- c(help.vector.12,rep(s,N.settlers.for.fxn[i,11,s])) #repeat site number for number of age 12 settlers
+    help.vector.13 <- c(help.vector.13,rep(s,N.settlers.for.fxn[i,12,s])) #repeat site number for number of age 13 settlers
+    help.vector.14 <- c(help.vector.14,rep(s,N.settlers.for.fxn[i,13,s])) #repeat site number for number of age 14 settlers
+    help.vector.15 <- c(help.vector.15,rep(s,N.settlers.for.fxn[i,14,s])) #repeat site number for number of age 15 settlers
   }
     
   #if there are no candidate movers, end the function and output all 0s 
-  if((length(help.vector.2) + length(help.vector.3))==0) {
+  if((length(help.vector.2) + length(help.vector.3)+length(help.vector.4)+
+      length(help.vector.5) + length(help.vector.6)+length(help.vector.7)+
+      length(help.vector.8) + length(help.vector.9)+length(help.vector.10)+
+      length(help.vector.11) + length(help.vector.12)+length(help.vector.13)+
+      length(help.vector.14) + length(help.vector.15))==0) {
     n.new.2.temp <- n.new.3.temp <- n.new.4.temp <- n.new.5.temp <- n.new.6.temp <- n.new.7.temp <- 
       n.new.8.temp <- n.new.9.temp <- n.new.10.temp <- n.new.11.temp <- n.new.12.temp <- n.new.13.temp <- n.new.14.temp <- n.new.15.temp <- rep(0,224) 
     #n.new.2.temp.solo <- n.new.3.temp.solo #n.new.2.temp.wrejects <- n.new.3.temp.wrejects 
@@ -63,10 +67,18 @@ help.vector.10 <- help.vector.11 <- help.vector.12 <- help.vector.13 <- help.vec
   #settlers matrix includes the original site,
   #an indc for settler (1) vs immigrant (2), age 2 or 3, and 
 
-   set.mat <- data.frame(orig.site = c(help.vector.2,help.vector.3,help.vector.4,help.vector.5,help.vector.6,help.vector.7,help.vector.8,help.vector.9,help.vector.10,help.vector.11,help.vector.12,help.vector.13,help.vector.14,help.vector.15),
-                                  age = c(rep(2,length(help.vector.2)),rep(3,length(help.vector.3)),rep(4,length(help.vector.4)),rep(5,length(help.vector.5)),rep(6,length(help.vector.6))
-                                          ,rep(7,length(help.vector.7)),rep(8,length(help.vector.8)),rep(9,length(help.vector.9)),rep(10,length(help.vector.10)),rep(11,length(help.vector.11))
-                                          ,rep(11,length(help.vector.11)),rep(12,length(help.vector.12)),rep(13,length(help.vector.13)),rep(14,length(help.vector.14)),rep(15,length(help.vector.15))))
+   set.mat <- data.frame(orig.site = c(help.vector.2, help.vector.3, help.vector.4, 
+                                       help.vector.5, help.vector.6, help.vector.7,
+                                       help.vector.8, help.vector.9, help.vector.10,
+                                       help.vector.11,help.vector.12,help.vector.13,
+                                       help.vector.14,help.vector.15),
+                                  age = c(rep(2,length(help.vector.2)),rep(3,length(help.vector.3)),
+                                          rep(4,length(help.vector.4)),rep(5,length(help.vector.5)),
+                                          rep(6,length(help.vector.6)),rep(7,length(help.vector.7)),
+                                          rep(8,length(help.vector.8)),rep(9,length(help.vector.9)),
+                                          rep(10,length(help.vector.10)),rep(11,length(help.vector.11)),
+                                          rep(12,length(help.vector.12)),rep(13,length(help.vector.13)),
+                                          rep(14,length(help.vector.14)),rep(15,length(help.vector.15))))
     
 ###################################################################################################
 #                                                                                                  #
@@ -207,5 +219,5 @@ return(list(n.new.2.count, n.new.3.count, n.new.4.count, n.new.5.count, n.new.6.
 
 }
 
-# n.settlers.for.fxn <- array(rpois(22400,1), dim=c(50,2,224))
+# N.settlers.for.fxn <- array(rpois(22400,1), dim=c(50,2,224))
 # n.res <- array(rpois(22400,3), dim=c(50,224))
