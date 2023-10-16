@@ -25,8 +25,8 @@ load("data/Spatial_Information.RData")
 load("data/Projection_Inputs.RData")
 
 #fixed values 
-proj <- 51 #100 #years of projection
-nSims <- 100 #number of simulations per sample from the posterior
+proj <- 51 #years of projection
+nSims <- 1 #100 #number of simulations per sample from the posterior
 nSamples <- 500 #number of samples from the posterior 
 S <- 224 #territories
 
@@ -81,11 +81,13 @@ removal_rate <- 0.03718274
 ####### THIS IS WHERE PROJECTION MODEL CODE BEGINS ######
 
 #storage for sim loop
-Nglobal.mean <- 
-  NAdult_state.mean <- NAdult_EWash.mean <- NAdult_NCasc.mean <- 
-  NAdult_SCasc.mean <- NSite_state.mean <- NSite_EWash.mean <-
-  NSite_NCasc.mean <- NSite_SCasc.mean <- array(NA, dim = c(nSamples, proj, nSims))
-lambda.mean <- p.quasiext <- p.recovery <- numeric(nSims)
+Nglobal_state.mean <- Nglobal_state_wmove.mean <- NAdult_state.mean <- #NAdult_state_wsolo.mean <- 
+  NAdult_EWash.mean <- NAdult_NCasc.mean <- NAdult_SCasc.mean <- 
+  NSite_state.mean <- NSite_EWash.mean <- NSite_NCasc.mean <- NSite_SCasc.mean <- array(NA, dim = c(nSamples, proj, nSims))
+Lambda.mean <- array(NA, dim = c(nSamples, proj-1, nSims))
+BP_Presence <- Pack_Size <- Ntot.site <- Newguys.mean <- Two_Adult <- array(NA, dim = c(nSamples, proj, S, nSims))
+lambda.mean <- lambda.upper <- lambda.lower <- p.quasiext <- p.recovery <- numeric(nSims)
+#qe.size.sim <- end.size.sim <- array(NA, dim = c(nSims, 3))
 
 for(sim in 1:nSims){
   
@@ -531,158 +533,164 @@ for(sim in 1:nSims){
       #all of these are counting packs where n > 2 per site
       Nglobal_state.proj[i,t] <- sum(Ntot.proj[i,t,])
       Nglobal_state_wmove.proj[i,t] <- sum(Ntot.proj[i,t,]) + sum(N.movers.proj.new[i,,1,t,])
-      NAdult_state.proj[i,t] <- sum(N.proj.new[i,2,1,t,]) + sum(N.proj.new[i,3,1,t,])
-      + sum(N.proj.new[i,4,1,t,])
-      + sum(N.proj.new[i,5,1,t,])
-      + sum(N.proj.new[i,6,1,t,])
-      + sum(N.proj.new[i,7,1,t,])
-      + sum(N.proj.new[i,8,1,t,])
-      + sum(N.proj.new[i,9,1,t,])
-      + sum(N.proj.new[i,10,1,t,])
-      + sum(N.proj.new[i,11,1,t,])
-      + sum(N.proj.new[i,12,1,t,])
-      + sum(N.proj.new[i,13,1,t,])
-      + sum(N.proj.new[i,14,1,t,])
-      + sum(N.proj.new[i,15,1,t,])
-      NAdult_EWash.proj[i,t] <- sum(N.proj.new[i,2,1,t,EWash]) + sum(N.proj.new[i,3,1,t,EWash])
-      + sum(N.proj.new[i,4,1,t,EWash])
-      + sum(N.proj.new[i,5,1,t,EWash])
-      + sum(N.proj.new[i,6,1,t,EWash])
-      + sum(N.proj.new[i,7,1,t,EWash])
-      + sum(N.proj.new[i,8,1,t,EWash])
-      + sum(N.proj.new[i,9,1,t,EWash])
-      + sum(N.proj.new[i,10,1,t,EWash])
-      + sum(N.proj.new[i,11,1,t,EWash])
-      + sum(N.proj.new[i,12,1,t,EWash])
-      + sum(N.proj.new[i,13,1,t,EWash])
-      + sum(N.proj.new[i,14,1,t,EWash])
-      + sum(N.proj.new[i,15,1,t,EWash])
-      NAdult_NCasc.proj[i,t] <- sum(N.proj.new[i,2,1,t,NorthCasc]) + sum(N.proj.new[i,3,1,t,NorthCasc])
-      + sum(N.proj.new[i,4,1,t,NorthCasc])
-      + sum(N.proj.new[i,5,1,t,NorthCasc])
-      + sum(N.proj.new[i,6,1,t,NorthCasc])
-      + sum(N.proj.new[i,7,1,t,NorthCasc])
-      + sum(N.proj.new[i,8,1,t,NorthCasc])
-      + sum(N.proj.new[i,9,1,t,NorthCasc])
-      + sum(N.proj.new[i,10,1,t,NorthCasc])
-      + sum(N.proj.new[i,11,1,t,NorthCasc])
-      + sum(N.proj.new[i,12,1,t,NorthCasc])
-      + sum(N.proj.new[i,13,1,t,NorthCasc])
-      + sum(N.proj.new[i,14,1,t,NorthCasc])
-      + sum(N.proj.new[i,15,1,t,NorthCasc])
-      NAdult_SCasc.proj[i,t] <- sum(N.proj.new[i,2,1,t,SouthCasc]) + sum(N.proj.new[i,3,1,t,SouthCasc])
-      + sum(N.proj.new[i,4,1,t,SouthCasc])
-      + sum(N.proj.new[i,5,1,t,SouthCasc])
-      + sum(N.proj.new[i,6,1,t,SouthCasc])
-      + sum(N.proj.new[i,7,1,t,SouthCasc])
-      + sum(N.proj.new[i,8,1,t,SouthCasc])
-      + sum(N.proj.new[i,9,1,t,SouthCasc])
-      + sum(N.proj.new[i,10,1,t,SouthCasc])
-      + sum(N.proj.new[i,11,1,t,SouthCasc])
-      + sum(N.proj.new[i,12,1,t,SouthCasc])
-      + sum(N.proj.new[i,13,1,t,SouthCasc])
-      + sum(N.proj.new[i,14,1,t,SouthCasc])
-      + sum(N.proj.new[i,15,1,t,SouthCasc])
+      NAdult_state.proj[i,t] <- sum(N.proj.new[i,2,1,t,]) + 
+                                sum(N.proj.new[i,3,1,t,]) + 
+                                sum(N.proj.new[i,4,1,t,]) + 
+                                sum(N.proj.new[i,5,1,t,]) +
+                                sum(N.proj.new[i,6,1,t,]) +
+                                sum(N.proj.new[i,7,1,t,]) +
+                                sum(N.proj.new[i,8,1,t,]) +
+                                sum(N.proj.new[i,9,1,t,]) +
+                                sum(N.proj.new[i,10,1,t,]) +
+                                sum(N.proj.new[i,11,1,t,]) +
+                                sum(N.proj.new[i,12,1,t,]) +
+                                sum(N.proj.new[i,13,1,t,]) +
+                                sum(N.proj.new[i,14,1,t,]) +
+                                sum(N.proj.new[i,15,1,t,])
+      NAdult_EWash.proj[i,t] <- sum(N.proj.new[i,2,1,t,EWash]) + 
+                                sum(N.proj.new[i,3,1,t,EWash]) +
+                                sum(N.proj.new[i,4,1,t,EWash]) +
+                                sum(N.proj.new[i,5,1,t,EWash]) +
+                                sum(N.proj.new[i,6,1,t,EWash]) +
+                                sum(N.proj.new[i,7,1,t,EWash]) +
+                                sum(N.proj.new[i,8,1,t,EWash]) +
+                                sum(N.proj.new[i,9,1,t,EWash]) +
+                                sum(N.proj.new[i,10,1,t,EWash]) +
+                                sum(N.proj.new[i,11,1,t,EWash]) +
+                                sum(N.proj.new[i,12,1,t,EWash]) +
+                                sum(N.proj.new[i,13,1,t,EWash]) +
+                                sum(N.proj.new[i,14,1,t,EWash]) +
+                                sum(N.proj.new[i,15,1,t,EWash])
+      NAdult_NCasc.proj[i,t] <- sum(N.proj.new[i,2,1,t,NorthCasc]) + 
+                                sum(N.proj.new[i,3,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,4,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,5,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,6,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,7,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,8,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,9,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,10,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,11,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,12,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,13,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,14,1,t,NorthCasc]) +
+                                sum(N.proj.new[i,15,1,t,NorthCasc])
+      NAdult_SCasc.proj[i,t] <- sum(N.proj.new[i,2,1,t,SouthCasc]) + 
+                                sum(N.proj.new[i,3,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,4,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,5,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,6,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,7,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,8,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,9,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,10,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,11,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,12,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,13,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,14,1,t,SouthCasc]) +
+                                sum(N.proj.new[i,15,1,t,SouthCasc])
       
-      NSite_state.proj[i,t] <- length(which((N.proj.new[i,2,1,t,] 
-                                             + N.proj.new[i,3,1,t,]
-                                             + N.proj.new[i,4,1,t,]
-                                             + N.proj.new[i,5,1,t,]
-                                             + N.proj.new[i,6,1,t,]
-                                             + N.proj.new[i,7,1,t,]
-                                             + N.proj.new[i,8,1,t,]
-                                             + N.proj.new[i,9,1,t,]
-                                             + N.proj.new[i,10,1,t,]
-                                             + N.proj.new[i,11,1,t,]
-                                             + N.proj.new[i,12,1,t,]
-                                             + N.proj.new[i,13,1,t,]
-                                             + N.proj.new[i,14,1,t,]
-                                             + N.proj.new[i,15,1,t,]>=2) & N.proj.new[i,1,1,t,]>=2))
-      NSite_EWash.proj[i,t] <- length(which((N.proj.new[i,2,1,t,EWash] 
-                                             + N.proj.new[i,3,1,t,EWash]
-                                             + N.proj.new[i,4,1,t,EWash]
-                                             + N.proj.new[i,5,1,t,EWash]
-                                             + N.proj.new[i,6,1,t,EWash]
-                                             + N.proj.new[i,7,1,t,EWash]
-                                             + N.proj.new[i,8,1,t,EWash]
-                                             + N.proj.new[i,9,1,t,EWash]
-                                             + N.proj.new[i,10,1,t,EWash]
-                                             + N.proj.new[i,11,1,t,EWash]
-                                             + N.proj.new[i,12,1,t,EWash]
-                                             + N.proj.new[i,13,1,t,EWash]
-                                             + N.proj.new[i,14,1,t,EWash]
-                                             + N.proj.new[i,15,1,t,EWash]>=2) & N.proj.new[i,1,1,t,EWash]>=2))
-      NSite_NCasc.proj[i,t] <- length(which((N.proj.new[i,2,1,t,NorthCasc] 
-                                             + N.proj.new[i,3,1,t,NorthCasc]
-                                             + N.proj.new[i,4,1,t,NorthCasc]
-                                             + N.proj.new[i,5,1,t,NorthCasc]
-                                             + N.proj.new[i,6,1,t,NorthCasc]
-                                             + N.proj.new[i,7,1,t,NorthCasc]
-                                             + N.proj.new[i,8,1,t,NorthCasc]
-                                             + N.proj.new[i,9,1,t,NorthCasc]
-                                             + N.proj.new[i,10,1,t,NorthCasc]
-                                             + N.proj.new[i,11,1,t,NorthCasc]
-                                             + N.proj.new[i,12,1,t,NorthCasc]
-                                             + N.proj.new[i,13,1,t,NorthCasc]
-                                             + N.proj.new[i,14,1,t,NorthCasc]
-                                             + N.proj.new[i,15,1,t,NorthCasc]>=2) & N.proj.new[i,1,1,t,NorthCasc]>=2))
-      NSite_SCasc.proj[i,t] <- length(which((N.proj.new[i,2,1,t,SouthCasc] 
-                                             + N.proj.new[i,3,1,t,SouthCasc]
-                                             + N.proj.new[i,4,1,t,SouthCasc]
-                                             + N.proj.new[i,5,1,t,SouthCasc]
-                                             + N.proj.new[i,6,1,t,SouthCasc]
-                                             + N.proj.new[i,7,1,t,SouthCasc]
-                                             + N.proj.new[i,8,1,t,SouthCasc]
-                                             + N.proj.new[i,9,1,t,SouthCasc]
-                                             + N.proj.new[i,10,1,t,SouthCasc]
-                                             + N.proj.new[i,11,1,t,SouthCasc]
-                                             + N.proj.new[i,12,1,t,SouthCasc]
-                                             + N.proj.new[i,13,1,t,SouthCasc]
-                                             + N.proj.new[i,14,1,t,SouthCasc]
-                                             + N.proj.new[i,15,1,t,SouthCasc]>=2) & N.proj.new[i,1,1,t,SouthCasc]>=2))
+      NSite_state.proj[i,t] <- length(which((N.proj.new[i,2,1,t,] + 
+                                             N.proj.new[i,3,1,t,]+ 
+                                             N.proj.new[i,4,1,t,]+ 
+                                             N.proj.new[i,5,1,t,]+ 
+                                             N.proj.new[i,6,1,t,]+ 
+                                             N.proj.new[i,7,1,t,]+ 
+                                             N.proj.new[i,8,1,t,]+ 
+                                             N.proj.new[i,9,1,t,]+ 
+                                             N.proj.new[i,10,1,t,]+ 
+                                             N.proj.new[i,11,1,t,]+ 
+                                             N.proj.new[i,12,1,t,]+ 
+                                             N.proj.new[i,13,1,t,]+ 
+                                             N.proj.new[i,14,1,t,]+ 
+                                             N.proj.new[i,15,1,t,]>=2) & N.proj.new[i,1,1,t,]>=2))
+      NSite_EWash.proj[i,t] <- length(which((N.proj.new[i,2,1,t,EWash] +
+                                             N.proj.new[i,3,1,t,EWash] +
+                                             N.proj.new[i,4,1,t,EWash] +
+                                             N.proj.new[i,5,1,t,EWash] +
+                                             N.proj.new[i,6,1,t,EWash] +
+                                             N.proj.new[i,7,1,t,EWash] +
+                                             N.proj.new[i,8,1,t,EWash] +
+                                             N.proj.new[i,9,1,t,EWash] +
+                                             N.proj.new[i,10,1,t,EWash] +
+                                             N.proj.new[i,11,1,t,EWash] +
+                                             N.proj.new[i,12,1,t,EWash] +
+                                             N.proj.new[i,13,1,t,EWash] +
+                                             N.proj.new[i,14,1,t,EWash] +
+                                             N.proj.new[i,15,1,t,EWash]>=2) & N.proj.new[i,1,1,t,EWash]>=2))
+      NSite_NCasc.proj[i,t] <- length(which((N.proj.new[i,2,1,t,NorthCasc] +
+                                             N.proj.new[i,3,1,t,NorthCasc] +
+                                             N.proj.new[i,4,1,t,NorthCasc] +
+                                             N.proj.new[i,5,1,t,NorthCasc] +
+                                             N.proj.new[i,6,1,t,NorthCasc] +
+                                             N.proj.new[i,7,1,t,NorthCasc] +
+                                             N.proj.new[i,8,1,t,NorthCasc] +
+                                             N.proj.new[i,9,1,t,NorthCasc] +
+                                             N.proj.new[i,10,1,t,NorthCasc] +
+                                             N.proj.new[i,11,1,t,NorthCasc] +
+                                             N.proj.new[i,12,1,t,NorthCasc] +
+                                             N.proj.new[i,13,1,t,NorthCasc] +
+                                             N.proj.new[i,14,1,t,NorthCasc] +
+                                             N.proj.new[i,15,1,t,NorthCasc]>=2) & N.proj.new[i,1,1,t,NorthCasc]>=2))
+      NSite_SCasc.proj[i,t] <- length(which((N.proj.new[i,2,1,t,SouthCasc] +
+                                             N.proj.new[i,3,1,t,SouthCasc]+
+                                             N.proj.new[i,4,1,t,SouthCasc]+
+                                             N.proj.new[i,5,1,t,SouthCasc]+
+                                             N.proj.new[i,6,1,t,SouthCasc]+
+                                             N.proj.new[i,7,1,t,SouthCasc]+
+                                             N.proj.new[i,8,1,t,SouthCasc]+
+                                             N.proj.new[i,9,1,t,SouthCasc]+
+                                             N.proj.new[i,10,1,t,SouthCasc]+
+                                             N.proj.new[i,11,1,t,SouthCasc]+
+                                             N.proj.new[i,12,1,t,SouthCasc]+
+                                             N.proj.new[i,13,1,t,SouthCasc]+
+                                             N.proj.new[i,14,1,t,SouthCasc]+
+                                             N.proj.new[i,15,1,t,SouthCasc]>=2) & N.proj.new[i,1,1,t,SouthCasc]>=2))
       for(s in 1:S){
         N_newguys.proj[i,t,s] <- sum(newguys[i,,t,s])
-        BP_presence.proj[i,t,s] <- ifelse(N.proj.new[i,2,1,t,s] 
-                                          + N.proj.new[i,3,1,t,s]
-                                          + N.proj.new[i,4,1,t,s]
-                                          + N.proj.new[i,5,1,t,s]
-                                          + N.proj.new[i,6,1,t,s]
-                                          + N.proj.new[i,7,1,t,s]
-                                          + N.proj.new[i,8,1,t,s]
-                                          + N.proj.new[i,9,1,t,s]
-                                          + N.proj.new[i,10,1,t,s]
-                                          + N.proj.new[i,11,1,t,s]
-                                          + N.proj.new[i,12,1,t,s]
-                                          + N.proj.new[i,13,1,t,s]
-                                          + N.proj.new[i,14,1,t,s]
-                                          + N.proj.new[i,15,1,t,s]>=2 & N.proj.new[i,1,1,t,s]>=2,1,0)
-        Two_Adult.proj[i,t,s] <- ifelse(N.proj.new[i,2,1,t,s] 
-                                        + N.proj.new[i,3,1,t,s]
-                                        + N.proj.new[i,4,1,t,s]
-                                        + N.proj.new[i,5,1,t,s]
-                                        + N.proj.new[i,6,1,t,s]
-                                        + N.proj.new[i,7,1,t,s]
-                                        + N.proj.new[i,8,1,t,s]
-                                        + N.proj.new[i,9,1,t,s]
-                                        + N.proj.new[i,10,1,t,s]
-                                        + N.proj.new[i,11,1,t,s]
-                                        + N.proj.new[i,12,1,t,s]
-                                        + N.proj.new[i,13,1,t,s]
-                                        + N.proj.new[i,14,1,t,s]
-                                        + N.proj.new[i,15,1,t,s]>=2,1,0)
-        Pack_Size.proj[i,t,s] <- N.proj.new[i,1,1,t,s] + N.proj.new[i,2,1,t,s] + N.proj.new[i,3,1,t,s]
-        + N.proj.new[i,4,1,t,s]
-        + N.proj.new[i,5,1,t,s]
-        + N.proj.new[i,6,1,t,s]
-        + N.proj.new[i,7,1,t,s]
-        + N.proj.new[i,8,1,t,s]
-        + N.proj.new[i,9,1,t,s]
-        + N.proj.new[i,10,1,t,s]
-        + N.proj.new[i,11,1,t,s]
-        + N.proj.new[i,12,1,t,s]
-        + N.proj.new[i,13,1,t,s]
-        + N.proj.new[i,14,1,t,s]
-        + N.proj.new[i,15,1,t,s]
+        BP_presence.proj[i,t,s] <- ifelse(N.proj.new[i,2,1,t,s] + 
+                                          N.proj.new[i,3,1,t,s] +
+                                          N.proj.new[i,4,1,t,s] +
+                                          N.proj.new[i,5,1,t,s] +
+                                          N.proj.new[i,6,1,t,s] +
+                                          N.proj.new[i,7,1,t,s] +
+                                          N.proj.new[i,8,1,t,s] +
+                                          N.proj.new[i,9,1,t,s] +
+                                          N.proj.new[i,10,1,t,s] +
+                                          N.proj.new[i,11,1,t,s] +
+                                          N.proj.new[i,12,1,t,s] +
+                                          N.proj.new[i,13,1,t,s] +
+                                          N.proj.new[i,14,1,t,s] +
+                                          N.proj.new[i,15,1,t,s]>=2 & N.proj.new[i,1,1,t,s]>=2,1,0)
+        Two_Adult.proj[i,t,s] <- ifelse(N.proj.new[i,2,1,t,s] +
+                                        N.proj.new[i,3,1,t,s] +
+                                        N.proj.new[i,4,1,t,s] +
+                                        N.proj.new[i,5,1,t,s] +
+                                        N.proj.new[i,6,1,t,s] +
+                                        N.proj.new[i,7,1,t,s] +
+                                        N.proj.new[i,8,1,t,s] +
+                                        N.proj.new[i,9,1,t,s] +
+                                        N.proj.new[i,10,1,t,s] +
+                                        N.proj.new[i,11,1,t,s] +
+                                        N.proj.new[i,12,1,t,s] +
+                                        N.proj.new[i,13,1,t,s] +
+                                        N.proj.new[i,14,1,t,s] +
+                                        N.proj.new[i,15,1,t,s]>=2,1,0)
+        Pack_Size.proj[i,t,s] <- N.proj.new[i,1,1,t,s] + 
+          N.proj.new[i,2,1,t,s] + 
+          N.proj.new[i,3,1,t,s] + 
+          N.proj.new[i,4,1,t,s] + 
+          N.proj.new[i,5,1,t,s] + 
+          N.proj.new[i,6,1,t,s] + 
+          N.proj.new[i,7,1,t,s] + 
+          N.proj.new[i,8,1,t,s] + 
+          N.proj.new[i,9,1,t,s] + 
+          N.proj.new[i,10,1,t,s] + 
+          N.proj.new[i,11,1,t,s] + 
+          N.proj.new[i,12,1,t,s] + 
+          N.proj.new[i,13,1,t,s] + 
+          N.proj.new[i,14,1,t,s] + 
+          N.proj.new[i,15,1,t,s]
       } #close s
     } #close t
   } #close i
@@ -735,4 +743,4 @@ save(Lambda.mean,
      Nglobal_state.mean, Nglobal_state_wmove.mean,
      NAdult_state.mean,
      NAdult_EWash.mean, NAdult_NCasc.mean, NAdult_SCasc.mean, Newguys.mean,
-     NSite_state.mean, NSite_EWash.mean, NSite_NCasc.mean, NSite_SCasc.mean, file="GitHub/Petracca_et_al_EcoApps/test.RData") #formerly "GitHub/Petracca_et_al_EcoApps/baseline_RSF.RData"
+     NSite_state.mean, NSite_EWash.mean, NSite_NCasc.mean, NSite_SCasc.mean, file="test.RData") #formerly "GitHub/Petracca_et_al_EcoApps/baseline_RSF.RData"
