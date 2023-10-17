@@ -6,11 +6,21 @@ get.solos <- function(n.wolves.solo.fxn, neighbor_list){
   for(i in 1:Nsamples){
     
     #get the site numbers of sites w only one wolf
-    packs_qualify <- which(n.wolves.solo.fxn[i,1,] + n.wolves.solo.fxn[i,2,] + n.wolves.solo.fxn[i,3,]+
-                             n.wolves.solo.fxn[i,4,] + n.wolves.solo.fxn[i,5,] + n.wolves.solo.fxn[i,6,]+
-                             n.wolves.solo.fxn[i,7,] + n.wolves.solo.fxn[i,8,] + n.wolves.solo.fxn[i,9,]+
-                             n.wolves.solo.fxn[i,10,] + n.wolves.solo.fxn[i,11,] + n.wolves.solo.fxn[i,12,]+
-                             n.wolves.solo.fxn[i,13,] + n.wolves.solo.fxn[i,14,] + n.wolves.solo.fxn[i,15,]==1)
+    packs_qualify <- which(n.wolves.solo.fxn[i,1,] + 
+                             n.wolves.solo.fxn[i,2,]+ 
+                             n.wolves.solo.fxn[i,3,]+
+                             n.wolves.solo.fxn[i,4,]+ 
+                             n.wolves.solo.fxn[i,5,]+ 
+                             n.wolves.solo.fxn[i,6,]+
+                             n.wolves.solo.fxn[i,7,]+ 
+                             n.wolves.solo.fxn[i,8,]+ 
+                             n.wolves.solo.fxn[i,9,]+
+                             n.wolves.solo.fxn[i,10,]+ 
+                             n.wolves.solo.fxn[i,11,]+ 
+                             n.wolves.solo.fxn[i,12,]+
+                             n.wolves.solo.fxn[i,13,]+ 
+                             n.wolves.solo.fxn[i,14,]+ 
+                             n.wolves.solo.fxn[i,15,]==1)
     
     #if there are not 2+ sites with only one wolf, get out of loop 
      if(length(packs_qualify) <=1){
