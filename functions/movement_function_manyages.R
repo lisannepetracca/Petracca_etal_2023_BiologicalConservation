@@ -20,10 +20,12 @@ Nsamples <- dim(N.settlers.for.fxn)[1]
 ####################################################################################################
 
 #these are the counts at i level
-n.new.2.count <- n.new.3.count <- n.new.4.count <- n.new.5.count <- n.new.6.count <- n.new.7.count <- 
-  n.new.8.count <- n.new.9.count <- n.new.10.count <- n.new.11.count <- n.new.12.count <- n.new.13.count <- 
-  n.new.14.count <- n.new.15.count <- #n.new.2.count.wrejects <- n.new.3.count.wrejects <- 
-  matrix(NA, nrow=Nsamples, ncol=224) #n.new.2.solo <- n.new.3.solo <-
+n.new.2.count <- n.new.3.count <- n.new.4.count <- 
+  n.new.5.count <- n.new.6.count <- n.new.7.count <- 
+  n.new.8.count <- n.new.9.count <- n.new.10.count <- 
+  n.new.11.count <- n.new.12.count <- n.new.13.count <- 
+  n.new.14.count <- n.new.15.count <- 
+  matrix(NA, nrow=Nsamples, ncol=224) 
    
  #now we are moving through the MCMC samples
  for(i in 1:Nsamples){    
@@ -31,8 +33,11 @@ n.new.2.count <- n.new.3.count <- n.new.4.count <- n.new.5.count <- n.new.6.coun
   #make a vector that is the number of individuals by site
   #number of new settlers age 2 
   #number of new settlers age 3 
-help.vector.2 <- help.vector.3 <- help.vector.4 <- help.vector.5 <- help.vector.6 <- help.vector.7 <- help.vector.8 <- help.vector.9 <- 
-help.vector.10 <- help.vector.11 <- help.vector.12 <- help.vector.13 <- help.vector.14 <- help.vector.15 <- vector()
+help.vector.2 <- help.vector.3 <- help.vector.4 <- 
+help.vector.5 <- help.vector.6 <- help.vector.7 <- 
+help.vector.8 <- help.vector.9 <- help.vector.10 <- 
+help.vector.11 <- help.vector.12 <- help.vector.13 <- 
+help.vector.14 <- help.vector.15 <- vector()
 
   #this is essentially when this becomes an IBM
   for(s in 1:224){
@@ -58,8 +63,11 @@ help.vector.10 <- help.vector.11 <- help.vector.12 <- help.vector.13 <- help.vec
       length(help.vector.8) + length(help.vector.9)+length(help.vector.10)+
       length(help.vector.11) + length(help.vector.12)+length(help.vector.13)+
       length(help.vector.14) + length(help.vector.15))==0) {
-    n.new.2.temp <- n.new.3.temp <- n.new.4.temp <- n.new.5.temp <- n.new.6.temp <- n.new.7.temp <- 
-      n.new.8.temp <- n.new.9.temp <- n.new.10.temp <- n.new.11.temp <- n.new.12.temp <- n.new.13.temp <- n.new.14.temp <- n.new.15.temp <- rep(0,224) 
+      n.new.2.temp <- n.new.3.temp <- n.new.4.temp <- 
+      n.new.5.temp <- n.new.6.temp <- n.new.7.temp <- 
+      n.new.8.temp <- n.new.9.temp <- n.new.10.temp <- 
+      n.new.11.temp <- n.new.12.temp <- n.new.13.temp <- 
+      n.new.14.temp <- n.new.15.temp <- rep(0,224) 
     #n.new.2.temp.solo <- n.new.3.temp.solo #n.new.2.temp.wrejects <- n.new.3.temp.wrejects 
   } else {
     
@@ -127,8 +135,10 @@ help.vector.10 <- help.vector.11 <- help.vector.12 <- help.vector.13 <- help.vec
    
    #do they stay or do they go?
    #going through 224 sites
-   n.new.2.temp <- n.new.3.temp <- n.new.4.temp <- n.new.5.temp <- n.new.6.temp <- n.new.7.temp <- n.new.8.temp <- n.new.9.temp <- n.new.10.temp <- 
-   n.new.11.temp <- n.new.12.temp <- n.new.13.temp <- n.new.14.temp <- n.new.15.temp <- rep(0,224) #n.new.2.temp.solo <- n.new.3.temp.solon.new.2.temp.wrejects <- n.new.3.temp.wrejects 
+   n.new.2.temp <- n.new.3.temp <- n.new.4.temp <- n.new.5.temp <- 
+     n.new.6.temp <- n.new.7.temp <- n.new.8.temp <- n.new.9.temp <- 
+     n.new.10.temp <- n.new.11.temp <- n.new.12.temp <- n.new.13.temp <- 
+     n.new.14.temp <- n.new.15.temp <- rep(0,224) 
    
    #rejected.2.settlers <- rejected.3.settlers <- vector() #solo.2.settlers <- solo.3.settlers 
    
@@ -215,7 +225,11 @@ help.vector.10 <- help.vector.11 <- help.vector.12 <- help.vector.13 <- help.vec
 ####################################################################################################
 
 #to bring back to model    
-return(list(n.new.2.count, n.new.3.count, n.new.4.count, n.new.5.count, n.new.6.count, n.new.7.count, n.new.8.count, n.new.9.count, n.new.10.count, n.new.11.count, n.new.12.count, n.new.13.count, n.new.14.count, n.new.15.count))    #n.new.2.solo, n.new.3.solon.new.2.count.wrejects, n.new.3.count.wrejects
+return(list(n.new.2.count, n.new.3.count, n.new.4.count, 
+            n.new.5.count, n.new.6.count, n.new.7.count, 
+            n.new.8.count, n.new.9.count, n.new.10.count, 
+            n.new.11.count, n.new.12.count, n.new.13.count, 
+            n.new.14.count, n.new.15.count))    #n.new.2.solo, n.new.3.solon.new.2.count.wrejects, n.new.3.count.wrejects
 
 }
 
