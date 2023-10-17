@@ -26,13 +26,9 @@ load("data/Projection_Inputs.RData")
 
 #fixed values 
 proj <- 51 #years of projection
-nSims <- 1 #100 #number of simulations per sample from the posterior
+nSims <- 100 #number of simulations per sample from the posterior
 nSamples <- 500 #number of samples from the posterior 
 S <- 224 #territories
-
-#bringing in immigrants from IPM
-N.immig.proj.new <- array(NA, dim=c(nSamples, 15, 2, proj, S))
-N.immig.proj.new[,,,1,] <- N.immig.proj[,,,1,]
 
 #probabilities of immigration from Jimenez et al. for ages 1-9
 probImmigDec  <- c(0.0000000000, 0.1901559398, 0.2725582537, 0.2633097605, 0.1714480386, 0.0752407503, 0.0222547746, 0.0044364405, 0.0005960421)
@@ -46,31 +42,35 @@ stable.age.trunc <- c(0.14460916, 0.12796228, 0.11323173, 0.10019690, 0.08866260
 
 #these are the initial population sizes by simulation, age, time-type, year, pack territory 
 N.proj.new <- array(NA, dim=c(nSamples, 15, 2, proj, S))
-N.proj.new[,1,1,1,1:S] <- N.proj[,1,1,1,1:S] #from model output 
-N.proj.new[,2,1,1,1:S] <- N.proj[,2,1,1,1:S] #from model output 
+N.proj.new[,1,1,1,] <- N.proj[,1,1,1,] #from model output 
+N.proj.new[,2,1,1,] <- N.proj[,2,1,1,] #from model output 
 for(s in 1:S){
   N.proj.new[,3:oldest.age,1,1,s] <- rmultinom(1, N.proj[,3,1,1,s], stable.age.trunc)
 }#create from SAD 
 
 #these are the initial population sizes by simulation, age, time-type, year, pack territory 
 N.movers.proj.new <- array(NA, dim=c(nSamples, 15, 2, proj, S))
-N.movers.proj.new[,1,1,1,1:S] <- N.movers.proj[,1,1,1,1:S] #from model output 
-N.movers.proj.new[,2,1,1,1:S] <- N.movers.proj[,2,1,1,1:S] #from model output 
+N.movers.proj.new[,1,1,1,] <- N.movers.proj[,1,1,1,] #from model output 
+N.movers.proj.new[,2,1,1,] <- N.movers.proj[,2,1,1,] #from model output 
 for(s in 1:S){
   N.movers.proj.new[,3:oldest.age,1,1,s] <- rmultinom(1, N.movers.proj[,3,1,1,s], stable.age.trunc)
 }#create from SAD 
 
+#set this to 0 bc not all sites have immigration
+N.immig.proj.new <- array(0, dim=c(nSamples, 15, 2, proj, S))
+N.immig.proj.new[,1,1,1,] <- N.immig.proj[,1,1,1,]
+N.immig.proj.new[,2,1,1,] <- N.immig.proj[,2,1,1,]
+for(s in 1:S){
+  N.immig.proj.new[,3:oldest.age,1,1,s] <- rmultinom(1, N.immig.proj[,3,1,1,s], stable.age.trunc)}
 
 N.stayers.proj.new <- N.settlers.proj.new <- N.movers.newmove.proj.new <- 
   N.movers.oldmove.proj.new <- array(NA, dim=c(nSamples, 15, 2, proj, S))
 
-#set this to 0 bc not all sites have immigration
-N.immig.proj.new <- array(0, dim=c(nSamples, 15, 2, proj, S))
-
+#setting certain things to 0 for pups because not possible
 N.settlers.proj.new[,1,,,] <- N.immig.proj.new[,1,,,] <- N.movers.newmove.proj.new[,1,,,] <- N.movers.oldmove.proj.new[,1,,,] <- 0
 
 #setting up for new.guys array
-newguys <- array(0, dim=c(nSamples,2,proj,S))
+newguys <- array(0, dim=c(nSamples,2,proj,S)) #2 is correct for Dec/Jun each year
 
 ####### BASELINE SCENARIO ######
 
@@ -492,20 +492,20 @@ for(sim in 1:nSims){
     }#close i
     
     N.proj.new[,1,2,t+1,] <- N.stayers.proj.new[,1,2,t+1,]
-    N.proj.new[,2,2,t+1,] <- N.stayers.proj.new[,2,2,t+1,] + N.immig.proj.new[,2,2,t+1,] #+ new.guys[[1]] #these have rejected settlers and new guys
-    N.proj.new[,3,2,t+1,] <- N.stayers.proj.new[,3,2,t+1,] + N.immig.proj.new[,3,2,t+1,] #+ new.guys[[2]]
-    N.proj.new[,4,2,t+1,] <- N.stayers.proj.new[,4,2,t+1,] + N.immig.proj.new[,4,2,t+1,] #+ new.guys[[3]] 
-    N.proj.new[,5,2,t+1,] <- N.stayers.proj.new[,5,2,t+1,] + N.immig.proj.new[,5,2,t+1,] #+ new.guys[[4]]
-    N.proj.new[,6,2,t+1,] <- N.stayers.proj.new[,6,2,t+1,] + N.immig.proj.new[,6,2,t+1,] #+ new.guys[[5]] 
-    N.proj.new[,7,2,t+1,] <- N.stayers.proj.new[,7,2,t+1,] + N.immig.proj.new[,7,2,t+1,] #+ new.guys[[6]]
-    N.proj.new[,8,2,t+1,] <- N.stayers.proj.new[,8,2,t+1,] + N.immig.proj.new[,8,2,t+1,] #+ new.guys[[7]] 
-    N.proj.new[,9,2,t+1,] <- N.stayers.proj.new[,9,2,t+1,] + N.immig.proj.new[,9,2,t+1,] #+ new.guys[[8]]
-    N.proj.new[,10,2,t+1,] <- N.stayers.proj.new[,10,2,t+1,] + N.immig.proj.new[,10,2,t+1,] #+ new.guys[[9]] 
-    N.proj.new[,11,2,t+1,] <- N.stayers.proj.new[,11,2,t+1,] + N.immig.proj.new[,11,2,t+1,] #+ new.guys[[10]]
-    N.proj.new[,12,2,t+1,] <- N.stayers.proj.new[,12,2,t+1,] + N.immig.proj.new[,12,2,t+1,] #+ new.guys[[11]] 
-    N.proj.new[,13,2,t+1,] <- N.stayers.proj.new[,13,2,t+1,] + N.immig.proj.new[,13,2,t+1,] #+ new.guys[[12]]
-    N.proj.new[,14,2,t+1,] <- N.stayers.proj.new[,14,2,t+1,] + N.immig.proj.new[,14,2,t+1,] #+ new.guys[[13]]
-    N.proj.new[,15,2,t+1,] <- N.stayers.proj.new[,15,2,t+1,] + N.immig.proj.new[,15,2,t+1,] #+ new.guys[[14]] 
+    N.proj.new[,2,2,t+1,] <- N.stayers.proj.new[,2,2,t+1,] + N.immig.proj.new[,2,2,t+1,] + new.guys[[1]] #these have rejected settlers and new guys
+    N.proj.new[,3,2,t+1,] <- N.stayers.proj.new[,3,2,t+1,] + N.immig.proj.new[,3,2,t+1,] + new.guys[[2]]
+    N.proj.new[,4,2,t+1,] <- N.stayers.proj.new[,4,2,t+1,] + N.immig.proj.new[,4,2,t+1,] + new.guys[[3]] 
+    N.proj.new[,5,2,t+1,] <- N.stayers.proj.new[,5,2,t+1,] + N.immig.proj.new[,5,2,t+1,] + new.guys[[4]]
+    N.proj.new[,6,2,t+1,] <- N.stayers.proj.new[,6,2,t+1,] + N.immig.proj.new[,6,2,t+1,] + new.guys[[5]] 
+    N.proj.new[,7,2,t+1,] <- N.stayers.proj.new[,7,2,t+1,] + N.immig.proj.new[,7,2,t+1,] + new.guys[[6]]
+    N.proj.new[,8,2,t+1,] <- N.stayers.proj.new[,8,2,t+1,] + N.immig.proj.new[,8,2,t+1,] + new.guys[[7]] 
+    N.proj.new[,9,2,t+1,] <- N.stayers.proj.new[,9,2,t+1,] + N.immig.proj.new[,9,2,t+1,] + new.guys[[8]]
+    N.proj.new[,10,2,t+1,] <- N.stayers.proj.new[,10,2,t+1,] + N.immig.proj.new[,10,2,t+1,] + new.guys[[9]] 
+    N.proj.new[,11,2,t+1,] <- N.stayers.proj.new[,11,2,t+1,] + N.immig.proj.new[,11,2,t+1,] + new.guys[[10]]
+    N.proj.new[,12,2,t+1,] <- N.stayers.proj.new[,12,2,t+1,] + N.immig.proj.new[,12,2,t+1,] + new.guys[[11]] 
+    N.proj.new[,13,2,t+1,] <- N.stayers.proj.new[,13,2,t+1,] + N.immig.proj.new[,13,2,t+1,] + new.guys[[12]]
+    N.proj.new[,14,2,t+1,] <- N.stayers.proj.new[,14,2,t+1,] + N.immig.proj.new[,14,2,t+1,] + new.guys[[13]]
+    N.proj.new[,15,2,t+1,] <- N.stayers.proj.new[,15,2,t+1,] + N.immig.proj.new[,15,2,t+1,] + new.guys[[14]] 
     
     
     newguys[,2,t+1,] <- new.guys[[1]] + new.guys[[2]] + new.guys[[3]] + new.guys[[4]]+
@@ -589,7 +589,6 @@ for(sim in 1:nSims){
                                 sum(N.proj.new[i,13,1,t,SouthCasc]) +
                                 sum(N.proj.new[i,14,1,t,SouthCasc]) +
                                 sum(N.proj.new[i,15,1,t,SouthCasc])
-      
       NSite_state.proj[i,t] <- length(which((N.proj.new[i,2,1,t,] + 
                                              N.proj.new[i,3,1,t,]+ 
                                              N.proj.new[i,4,1,t,]+ 
@@ -677,20 +676,20 @@ for(sim in 1:nSims){
                                         N.proj.new[i,14,1,t,s] +
                                         N.proj.new[i,15,1,t,s]>=2,1,0)
         Pack_Size.proj[i,t,s] <- N.proj.new[i,1,1,t,s] + 
-          N.proj.new[i,2,1,t,s] + 
-          N.proj.new[i,3,1,t,s] + 
-          N.proj.new[i,4,1,t,s] + 
-          N.proj.new[i,5,1,t,s] + 
-          N.proj.new[i,6,1,t,s] + 
-          N.proj.new[i,7,1,t,s] + 
-          N.proj.new[i,8,1,t,s] + 
-          N.proj.new[i,9,1,t,s] + 
-          N.proj.new[i,10,1,t,s] + 
-          N.proj.new[i,11,1,t,s] + 
-          N.proj.new[i,12,1,t,s] + 
-          N.proj.new[i,13,1,t,s] + 
-          N.proj.new[i,14,1,t,s] + 
-          N.proj.new[i,15,1,t,s]
+                                  N.proj.new[i,2,1,t,s] + 
+                                  N.proj.new[i,3,1,t,s] + 
+                                  N.proj.new[i,4,1,t,s] + 
+                                  N.proj.new[i,5,1,t,s] + 
+                                  N.proj.new[i,6,1,t,s] + 
+                                  N.proj.new[i,7,1,t,s] + 
+                                  N.proj.new[i,8,1,t,s] + 
+                                  N.proj.new[i,9,1,t,s] + 
+                                  N.proj.new[i,10,1,t,s] + 
+                                  N.proj.new[i,11,1,t,s] + 
+                                  N.proj.new[i,12,1,t,s] + 
+                                  N.proj.new[i,13,1,t,s] + 
+                                  N.proj.new[i,14,1,t,s] + 
+                                  N.proj.new[i,15,1,t,s]
       } #close s
     } #close t
   } #close i
