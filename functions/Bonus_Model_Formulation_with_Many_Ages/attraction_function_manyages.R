@@ -1,7 +1,8 @@
 get.solos <- function(n.wolves.solo.fxn, neighbor_list){
   
-  #in this function, we are removing wolves by pack in E Washington based on a removal rate
-  Nsamples <- dim(n.wolves.solo.fxn)[1]
+  #in this function, we are assigning two "solo" wolves to the same territory if those territories are adjacent
+
+    Nsamples <- dim(n.wolves.solo.fxn)[1]
   
   for(i in 1:Nsamples){
     
