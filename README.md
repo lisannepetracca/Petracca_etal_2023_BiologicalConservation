@@ -7,7 +7,7 @@ Recolonizing species exhibit unique population dynamics, namely dispersal to and
 ## Code 
 1) [Scripts](./scripts/): The main folder (described [here](./scripts/a_DESCRIPTION.txt)) contains three codes -- one to run the IPM for the data collection period (2009-2020) and two different versions of the projection model for the years 2020-2070. The latter scripts differ based on chosen territory selection method. 
 
-The ["Bonus_Model_Formulation_with_Many_Ages" folder](./scripts/Bonus_Model_Formulation_with_Many_Ages) contains the same scripts for a model formulation that is age-structured and removes wolves from the model after reaching 15 years of age.
+The ["Bonus_Model_Formulation_with_Many_Ages" folder](./scripts/Bonus_Model_Formulation_with_Many_Ages) contains the script for a projection model formulation that is age-structured and removes wolves from the model after reaching 15 years of age. This script uses the categorical RSF territory selection process.
 
 Lastly, this folder has four scripts in the ["Preliminary_Analysis_Steps" folder](./scripts/Preliminary_Analysis_Steps) for processing of GPS collar data for the territory size and RSF analyses. However, these data are not available publicly due to their sensitive nature. Interested parties should contact Donny Martorello at WDFW (Donny.Martorello@dfw.wa.gov).
 
