@@ -1,7 +1,7 @@
 #---
 #"Wolf IPM for Washington State"
 #"Lisanne Petracca"
-#"Nov 2022"
+#"November 2023"
 #---
 
 library(jagsUI)
