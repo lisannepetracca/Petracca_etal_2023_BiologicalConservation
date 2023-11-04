@@ -1,7 +1,7 @@
 #---
 #"Projection model for baseline scenario, categorical RSF territory selection method"
 #"Lisanne Petracca"
-#"Nov 2022"
+#"November 2023"
 #---
 
 library(tidyverse)
@@ -422,21 +422,21 @@ for(sim in 1:nSims){
   Pack_Size[,,,sim] <- as.array(Pack_Size.proj)
 } #close sim
 
-# dim(BP_Presence)
-# #this will give max pack size across x samples
-# Pack_Size_max <- apply(Pack_Size,c(1),max)
-# #this will get probability of having BP by site and year
-# BP_Presence_summary <- apply(BP_Presence,c(2,3),mean)
-# Two_Adult_summary <- apply(Two_Adult,c(2,3),mean)
-# #this will get mean and median wolves by site and year, and mean new guys
-# Ntot.site_mean <- apply(Ntot.site,c(2,3),mean)
-# Ntot.site_median <- apply(Ntot.site,c(2,3),mean)
-# Newguys.mean <- apply(Newguys.mean,c(2,3),mean)
-# 
-# save(Lambda.mean, 
-#      Ntot.site_mean, Ntot.site_median, Newguys.mean,
-#      BP_Presence_summary, BP_Presence, Pack_Size_max,Two_Adult_summary,Two_Adult,
-#      Nglobal_state.mean, Nglobal_state_wmove.mean,
-#      NAdult_state.mean, 
-#      NAdult_EWash.mean, NAdult_NCasc.mean, NAdult_SCasc.mean, Newguys.mean,
-#      NSite_state.mean, NSite_EWash.mean, NSite_NCasc.mean, NSite_SCasc.mean, file="GitHub/Petracca_et_al_EcoApps/baseline_RSF.RData")
+dim(BP_Presence)
+#this will give max pack size across x samples
+Pack_Size_max <- apply(Pack_Size,c(1),max)
+#this will get probability of having BP by site and year
+BP_Presence_summary <- apply(BP_Presence,c(2,3),mean)
+Two_Adult_summary <- apply(Two_Adult,c(2,3),mean)
+#this will get mean and median wolves by site and year, and mean new guys
+Ntot.site_mean <- apply(Ntot.site,c(2,3),mean)
+Ntot.site_median <- apply(Ntot.site,c(2,3),mean)
+Newguys.mean <- apply(Newguys.mean,c(2,3),mean)
+
+save(Lambda.mean,
+     Ntot.site_mean, Ntot.site_median, Newguys.mean,
+     BP_Presence_summary, BP_Presence, Pack_Size_max,Two_Adult_summary,Two_Adult,
+     Nglobal_state.mean, Nglobal_state_wmove.mean,
+     NAdult_state.mean,
+     NAdult_EWash.mean, NAdult_NCasc.mean, NAdult_SCasc.mean, Newguys.mean,
+     NSite_state.mean, NSite_EWash.mean, NSite_NCasc.mean, NSite_SCasc.mean, file="GitHub/Petracca_et_al_Merging_IPM_IBM/baseline_RSF.RData")
