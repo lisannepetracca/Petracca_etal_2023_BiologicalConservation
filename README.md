@@ -16,4 +16,4 @@ Lastly, this folder has four scripts in the ["Preliminary_Analysis_Steps" folder
 The ["Bonus_Model_Formulation_with_Many_Ages" folder](./functions/Bonus_Model_Formulation_with_Many_Ages) contains the same functions for a projection model formulation that is age-structured and removes wolves from the model after reaching 15 years of age. These functions use the categorical RSF territory selection process.
 
 ## Data
-Data files used to run the models in this paper are found in [Data](./data): See [here](./data/a_DESCRIPTION.txt) for more.
+Data files used to run the models in this paper are found in [Data](./data). Please see [here](./data/a_DESCRIPTION.txt) for more information.
