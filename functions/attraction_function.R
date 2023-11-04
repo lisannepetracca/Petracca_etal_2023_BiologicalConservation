@@ -35,26 +35,7 @@ get.solos <- function(n.wolves.solo.fxn, neighbor_list){
       } #closes loop of searching for solos
   } #closes i loop
 
-  
   #to bring back to model    
   return (n.wolves.solo.fxn)    
   
 } #closes function
-
-#work to see function is working correctly
-
-# set.seed(150)
-# 
-# n.wolves.solo.fxn <- array(rpois(33600,1), dim=c(50,3,224))
-# 
-# i <- 24
-# packs_qualify_orig <- which(n.wolves.solo.fxn[i,1,] + n.wolves.solo.fxn[i,2,] + n.wolves.solo.fxn[i,3,]==1)
-# 
-# sample <- sample(packs_qualify_orig,10)
-# sum(n.wolves.solo.fxn[i,1,packs_qualify_orig])
-# sum(n.wolves.solo.fxn[i,2,packs_qualify_orig])
-# sum(n.wolves.solo.fxn[i,3,packs_qualify_orig])
-# sum(n.wolves.solo.fxn[i,1,sample])
-# sum(n.wolves.solo.fxn[i,2,sample])
-# sum(n.wolves.solo.fxn[i,3,sample])
-# sum(n.wolves.solo.fxn[i,,]) #this should not change, and neither should first three, but last three can
