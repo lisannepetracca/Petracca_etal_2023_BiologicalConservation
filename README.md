@@ -13,7 +13,7 @@ Lastly, this folder has four scripts in the ["Preliminary_Analysis_Steps" folder
 
 2) [Functions](./functions/): The main folder (described [here](./functions/a_DESCRIPTION.txt)) contains all functions related to the individual-based movement model. These functions allow for attraction of lone wolves, lethal removals, and dispersal of wolves depending on chosen territory selection method. 
 
-The ["Bonus_Model_Formulation_with_Many_Ages" folder](./functions/Bonus_Model_Formulation_with_Many_Ages) contains the script for a projection model formulation that is age-structured and removes wolves from the model after reaching 15 years of age. This script uses the categorical RSF territory selection process.
+The ["Bonus_Model_Formulation_with_Many_Ages" folder](./functions/Bonus_Model_Formulation_with_Many_Ages) contains the same functions for a projection model formulation that is age-structured and removes wolves from the model after reaching 15 years of age. This script uses the categorical RSF territory selection process.
 
 ## Data
 Datasets used in this project are all found in [Data](./data): See [here](./data/a_DESCRIPTION.txt) for more.
