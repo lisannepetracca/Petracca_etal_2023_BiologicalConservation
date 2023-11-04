@@ -1,7 +1,7 @@
 #---
 #"Identify dispersal movements from wolf GPS collar data"
 #"Lisanne Petracca"
-#"Nov 2022"
+#"November 2023"
 #---
 
 library(adehabitatLT)

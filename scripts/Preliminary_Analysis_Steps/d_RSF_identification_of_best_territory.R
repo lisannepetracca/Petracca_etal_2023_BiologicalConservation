@@ -2,7 +2,7 @@
 #"Choosing 'best' territory at all distances from other territories, using output from RSF"
 #"Also calculates multinomial probabilities of suitability for all territories at a given distance from another"
 #"Lisanne Petracca"
-#"Nov 2022"
+#"November 2023"
 #---
 
 library(raster)
