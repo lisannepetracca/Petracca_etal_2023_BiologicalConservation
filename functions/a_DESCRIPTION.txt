@@ -5,3 +5,5 @@ movement_function -- at a given timestep, will assign moving wolves to new terri
 movement_function_singleLCP -- at a given timestep, will assign moving wolves to new territories (or keep them at original territories) based on dispersal distance and least cost path
 
 removals_function -- at a given timestep, will perform lethal removal of wolves from Eastern Washington recovery region given annual rate
+
+The folder "Bonus_Model_Formulation_with_Many_Ages" contains the same functions, but follows the model formulation in which wolves are killed after reaching age 15

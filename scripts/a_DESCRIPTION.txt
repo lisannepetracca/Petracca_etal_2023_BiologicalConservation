@@ -1,7 +1,9 @@
 IPM_data_collection_period.R -- has full IPM summarizing wolf population from 2009-2020 (data collection period)
 
-Projection_model_leastcost_territory_selection.R -- has spatial projection model for projection period (2020-2070) using categorical RSF territory selection process
+Projection_model_RSF_territory_selection.R -- has spatial projection model for projection period (2020-2070) using categorical RSF territory selection process
 
-Projection_model_RSF_territory_selection.R -- has spatial projection model for projection period (2020-2070) using least cost path territory selection process
+Projection_model_leastcost_territory_selection.R -- has spatial projection model for projection period (2020-2070) using least cost path territory selection process
 
 The folder "Preliminary_Analysis_Steps" contains four R scripts to (1) identify dispersal movements, (2) calculate mean territory size, (3) perform Resource Selection Function, and (4) identify the [1] "best" territory, and [2] best territories using multinomial probabilities, at multiple distances from each territory using the RSF output. A note that GPS collar data for wolves are sensitive and therefore not provided in this repository. Interested parties should contact Donny Martorello at WDFW.
+
+The folder "Bonus_Model_Formulation_with_Many_Ages" contains the spatial projection model for projection period (2020-2070) using least cost path territory selection process, but follows the model formulation in which wolves are killed after reaching age 15.
