@@ -34,21 +34,9 @@ get.removals <- function(n.wolves.all.fxn, n.wolves.EWash.fxn, removal_rate){
     
   } #close i loop
   
-  n.wolves.EWash.fxn[n.wolves.EWash.fxn==-1] <- 0
+  n.wolves.EWash.fxn[n.wolves.EWash.fxn==-1] <- 0 #set to 0 in case of any -1s
 
   #to bring back to model    
 return (n.wolves.EWash.fxn)    
 
 }
-
-# set.seed(101)
-# removal_rate <- 0.03
-# n.wolves.all.fxn <- array(rpois(33600,1), dim=c(50,3,224))
-# ceiling(sum(n.wolves.all.fxn[5,,]) * removal_rate) #will remove 20
-# n.wolves.EWash.fxn <- n.wolves.all.fxn[,,EWash]
-# # #
-# sum(n.wolves.EWash.fxn[5,,]) #from 213 to 193
-# sum(which(n.wolves.EWash.fxn[,,]<0, arr.ind=T)) #from 213 to 193
-
-#
-# dim(n.wolves.EWash.fxn)
