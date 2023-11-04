@@ -11,7 +11,7 @@ The ["Bonus_Model_Formulation_with_Many_Ages" folder](./scripts/Bonus_Model_Form
 
 Lastly, this folder has four scripts in the ["Preliminary_Analysis_Steps" folder](./scripts/Preliminary_Analysis_Steps) for processing of GPS collar data for the territory size and RSF analyses. However, these data are not available publicly due to their sensitive nature. Interested parties should contact Donny Martorello at WDFW (Donny.Martorello@dfw.wa.gov).
 
-2) [Functions](./functions/): This folder contains all functions related to the individual-based movement model. These functions allow for attraction of lone wolves, lethal removals, and dispersal of wolves depending on chosen territory selection method. See [here](./functions/a_DESCRIPTION.txt) for more.
+2) [Functions](./functions/): The main folder (described [here](./functions/a_DESCRIPTION.txt)) contains all functions related to the individual-based movement model. These functions allow for attraction of lone wolves, lethal removals, and dispersal of wolves depending on chosen territory selection method. 
 
 The ["Bonus_Model_Formulation_with_Many_Ages" folder](./functions/Bonus_Model_Formulation_with_Many_Ages) contains the same scripts for a model formulation that is age-structured and removes wolves from the model after reaching 15 years of age.
 
