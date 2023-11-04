@@ -1,6 +1,7 @@
 get.removals <- function(n.wolves.all.fxn, n.wolves.EWash.fxn, removal_rate){
   
   #in this function, we are removing wolves by pack in E Washington based on a removal rate
+  
   Nsamples <- dim(n.wolves.EWash.fxn)[1]
   
   for(i in 1:Nsamples){    
