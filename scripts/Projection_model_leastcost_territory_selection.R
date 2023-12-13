@@ -436,4 +436,4 @@ save(Lambda.mean,
      Nglobal_state.mean, Nglobal_state_wmove.mean,
      NAdult_state.mean, 
      NAdult_EWash.mean, NAdult_NCasc.mean, NAdult_SCasc.mean, Newguys.mean,
-     NSite_state.mean, NSite_EWash.mean, NSite_NCasc.mean, NSite_SCasc.mean, file="GitHub/Petracca_et_al_Merging_IPM_IBM/baseline_leastcost.RData")
+     NSite_state.mean, NSite_EWash.mean, NSite_NCasc.mean, NSite_SCasc.mean, file     ="baseline_leastcost.RData")
