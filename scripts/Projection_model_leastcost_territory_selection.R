@@ -61,8 +61,8 @@ for(sim in 1:nSims){
     phiA.proj[,2,t] <- plogis(rnorm(nSamples, mean=int.surv1[,1], sd = sigma.period)) 
     phiA.proj[,3,t] <- plogis(rnorm(nSamples, mean=int.surv1[,2], sd = sigma.period)) 
     phiB.proj[,1,t] <- 0
-    phiB.proj[,2,t] <- plogis(rnorm(nSamples, mean=int.surv1[,1], sd = sigma.period)) 
-    phiB.proj[,3,t] <- plogis(rnorm(nSamples, mean=int.surv1[,2], sd = sigma.period)) 
+    phiB.proj[,2,t] <- plogis(rnorm(nSamples, mean=int.surv2[,1], sd = sigma.period)) 
+    phiB.proj[,3,t] <- plogis(rnorm(nSamples, mean=int.surv2[,2], sd = sigma.period)) 
   } 
   
   #####---- STARTING MODEL WITH SECOND PERIOD OF YEAR 1 -----#####
