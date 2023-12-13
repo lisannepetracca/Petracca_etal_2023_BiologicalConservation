@@ -11,18 +11,18 @@ library(nimble)
 ######------ PULLING IN FUNCTION, PACKID, OCCUPANCY, CONNECTIVITY, OTHER SPATIAL COMPONENTS ------######
 
 #load categorical RSF territory selection information
-load("GitHub/Petracca_et_al_EcoApps/data/RSF_categorical_territory_selection_information.RData")
+load("data/RSF_categorical_territory_selection_information.RData")
 
 #load all functions
-source("GitHub/Petracca_et_al_EcoApps/functions/movement_function.R")
-source("GitHub/Petracca_et_al_EcoApps/functions/removals_function.R")
-source("GitHub/Petracca_et_al_EcoApps/functions/attraction_function.R")
+source("functions/movement_function.R")
+source("functions/removals_function.R")
+source("functions/attraction_function.R")
 
 #reading in spatial stuff from projection
-load("GitHub/Petracca_et_al_EcoApps/data/Spatial_Information.RData")
+load("data/Spatial_Information.RData")
 
 #reading in arrays needed for projection (incl. first year data)
-load("GitHub/Petracca_et_al_EcoApps/data/Projection_Inputs.RData")
+load("data/Projection_Inputs.RData")
 
 #fixed values 
 proj <- 51 #100 #years of projection
