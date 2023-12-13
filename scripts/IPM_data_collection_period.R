@@ -491,5 +491,5 @@ params <- c(  "Nglobal", "Nglobal_wmove",
 out <- jags(win.data, inits, params, "wolf_jags.txt", n.adapt=100, n.chains=nc, n.iter=ni, n.burn = nb, n.thin=nt, parallel=T)
 print(out,n=3)
 
-write.csv(as.mcmc(out$summary),"Outputs/a_composite_model/jags_removals_ddirch_Oct25_2022_epsB.csv")
-saveRDS(out, file = "Outputs/a_composite_model/jags_removals_ddirch_Oct25_2022_epsB.rds")
+write.csv(as.mcmc(out$summary),"IPM_output.csv")
+saveRDS(out, file = "IPM_output.rds")
