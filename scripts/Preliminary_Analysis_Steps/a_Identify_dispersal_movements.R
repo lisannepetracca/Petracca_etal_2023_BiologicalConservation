@@ -24,6 +24,7 @@ library(data.table)
 here()
 
 #read in data, set data as POSIXct class, and generate columns for year, hour, month, and bioyear
+#a note that the below .csv is not available in the public realm
 data <- read.csv("C:/Your_Directory/wolf_gpsdata_all_processed.csv", header=T)
 data$date <- as.POSIXct(data$date, tz="America/Los_Angeles")
 data$year <- year(data$date)
