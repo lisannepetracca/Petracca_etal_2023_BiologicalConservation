@@ -29,10 +29,11 @@ library(stringr)
 library(coda)
 library(data.table)
 library(tidyverse)
+library(here)
 
 #load data for model
-load("GitHub/Petracca_et_al_EcoApps/data/Data_for_IPM.Rdata")
-load("GitHub/Petracca_et_al_EcoApps/data/Spatial_Information.RData")
+load("data/Data_for_IPM.Rdata")
+load("data/Spatial_Information.RData")
 
 #this stable age distribution comes from survival estimates, and median observed f and pack size
 stableAge <- c(0.123, 0.114, 0.763)
