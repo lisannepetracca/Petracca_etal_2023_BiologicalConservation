@@ -58,7 +58,8 @@ saveRDS(data_min60, "C:/Your_Directory/points_for_RSF_consideration.RDS")
 ####---- CALCULATING 99% MCP ----####
 
 #IMPORTANT THAT WE REMOVE 19f BC ALL DISPERSAL (Diobsud)
-data_min60 <- data_min60 %>% filter(id!="019f_2013" && id!="019f_2014")
+data_min60 <- data_min60 %>% dplyr::filter(id!="019f_2013") 
+data_min60 <- data_min60 %>% dplyr::filter(id!="019f_2014")
 length(unique(data_min60$id))
 
 #converting data to spatial points data frame (package sp)
