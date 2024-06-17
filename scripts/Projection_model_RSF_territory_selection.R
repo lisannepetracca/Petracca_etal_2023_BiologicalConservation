@@ -131,7 +131,7 @@ for(sim in 1:nSims){
       #12-23.99 mo old class is the first class that can immigrate
       N.immig.proj[i,2,2,1,s] <- rbinom(1, Tot.immig.proj[i,2,1,s], probImmig[1])
       # group G: deterministic
-      N.immig.proj[i,3,2,1,s] <- Tot.immig.proj[i,2,1,s] - N.immig.proj[i,1,2,1,s]
+      N.immig.proj[i,3,2,1,s] <- Tot.immig.proj[i,2,1,s] - N.immig.proj[i,2,2,1,s]
     }}
   
   N.proj[,1,2,1,] <- N.stayers.proj[,1,2,1,]
