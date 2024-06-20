@@ -17,3 +17,6 @@ The ["Bonus_Model_Formulation_with_Many_Ages" folder](./functions/Bonus_Model_Fo
 
 ## Data
 Data files used to run the models in this paper are found in the [data](./data) folder. Please see [here](./data/a_DESCRIPTION.txt) for more information.
+
+## Updates
+The scripts in this folder are the most recent, as reflected in the Corrigendum to our 2024 paper (https://www.sciencedirect.com/science/article/pii/S0006320724001952). We also fixed an additional index, whereby the impact of this correction (e.g., about one wolf after 50 years) was much smaller than simulation error. 
