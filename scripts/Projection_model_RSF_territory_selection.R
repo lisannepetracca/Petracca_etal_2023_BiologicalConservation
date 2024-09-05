@@ -18,11 +18,8 @@ source("functions/movement_function.R")
 source("functions/removals_function.R")
 source("functions/attraction_function.R")
 
-#reading in spatial stuff from projection
+#reading in spatial data from projection
 load("data/Spatial_Information.RData")
-
-#reading in arrays needed for projection (incl. first year data)
-load("data/Projection_Inputs.RData")
 
 #fixed values 
 proj <- 51 #100 #years of projection
@@ -36,8 +33,7 @@ newguys <- array(0, dim=c(nSamples,2,proj,S))
 ####### BASELINE SCENARIO ######
 
 analysis <- "baseline"
-#scenario 1 : baseline: removal rate at annual mean (0.03718274), immigration as estimated, no harvest, no translocation, no disease
-removal_rate <- 0.03718274
+#scenario 1 : baseline: removal rate at annual mean, immigration as estimated, no harvest, no translocation, no disease
 
 ####### THIS IS WHERE PROJECTION MODEL CODE BEGINS ######
 
@@ -49,7 +45,11 @@ Lambda.mean <- array(NA, dim = c(nSamples, proj-1, nSims))
 BP_Presence <- Pack_Size <- Ntot.site <- Newguys.mean <- Two_Adult <- array(NA, dim = c(nSamples, proj, S, nSims))
 lambda.mean <- lambda.upper <- lambda.lower <- p.quasiext <- p.recovery <- numeric(nSims)
 
+
 for(sim in 1:nSims){
+  
+  #reading in arrays needed for projection (incl. first year data)
+  load("Projection_Inputs.RData")   
   
   set.seed(37585+sim)
   
@@ -67,11 +67,11 @@ for(sim in 1:nSims){
   
   #####---- STARTING MODEL WITH SECOND PERIOD OF YEAR 1 -----#####
   
-  #this is counting Ntot from the first time period [from other IPM run]
+  #this is counting Ntot from the first time period [from the IPM output]
   Ntot.proj[,1,] <-
     N.proj[,1,1,1,] + N.proj[,2,1,1,] + N.proj[,3,1,1,]
   
-  #moving onto second period of first year now
+  #moving on to second period of first year now
   for (s in 1:S){ #running through all 224 territories
     
     #12-mo-olds
@@ -94,7 +94,7 @@ for(sim in 1:nSims){
     N.stayers.proj[,3,2,1,s] <- rbinom(nSamples,  N.proj[,3,1,1,s], phiA.proj[,3,1]*(1-epsA[,2]))
     #new movers - intermediate class - last period's 30-mo+ old residents survive and start moving but stay in state AND last period's 30-mo+ old movers continue moving but stay in state 
     #all 1 here bc same year
-    N.movers.newmove.proj[,3,2,1,s] <- rbinom(nSamples, N.proj[,3,1,1,s], phiA.proj[,3,1]*epsA[,2]*alpha) #formerly sum(N.proj[,3,1,t,])
+    N.movers.newmove.proj[,3,2,1,s] <- rbinom(nSamples, N.proj[,3,1,1,s], phiA.proj[,3,1]*epsA[,2]*alpha) 
     N.movers.oldmove.proj[,3,2,1,s] <- rbinom(nSamples, N.movers.proj[,3,1,1,s], phiB.proj[,3,1]*epsB[,2]*alpha)
     N.movers.proj[,3,2,1,s] <- N.movers.newmove.proj[,3,2,1,s] + N.movers.oldmove.proj[,3,2,1,s]
     #settlers - intermediate class - last period's 30-mo+ old movers settle at s  
@@ -115,13 +115,13 @@ for(sim in 1:nSims){
   
   new.guys <- get.move(n.settlers.for.fxn,n.res,site_check,array_probs,array_siteID)  
   
-  for(i in 1:nSamples){ #nSamples samples
+  for(i in 1:nSamples){ #loop over nSamples to see which territories are occupied 
     
     #which ids are occupied?
     immig_id <- which(N.stayers.proj[i,1,2,1,] + N.stayers.proj[i,2,2,1,] + N.stayers.proj[i,3,2,1,]+
                         new.guys[[1]][i,] + new.guys[[2]][i,] >0)
-    #keeps total number of immigrants entering each year same as in data collection period
-    lambda.immig.t <- lambda.immig[i] * (17.6667/length(immig_id))
+    #keeps total number of immigrants entering each year to the asymptote from the growth model (ie, limits immigration so it doesn't grow with increasing # of packs)
+    lambda.immig.t <- lambda.immig[i]*(assmp.immig/length(immig_id))
     
     for(s in immig_id){
       
@@ -137,11 +137,11 @@ for(sim in 1:nSims){
   N.proj[,1,2,1,] <- N.stayers.proj[,1,2,1,]
   N.proj[,2,2,1,] <- N.stayers.proj[,2,2,1,] + N.immig.proj[,2,2,1,] + new.guys[[1]] #these have rejected settlers and new guys
   N.proj[,3,2,1,] <- N.stayers.proj[,3,2,1,] + N.immig.proj[,3,2,1,] + new.guys[[2]]
-
+  
   newguys[,2,1,] <- new.guys[[1]] + new.guys[[2]] #these are new guys only
   
   ##ATTRACTION FUNCTION HERE
-
+  
   n.wolves.solo.fxn <- array(NA,dim = c(nSamples,3,224))
   
   n.wolves.solo.fxn <- N.proj[,,2,1,] #just getting nSamples x 3 x site
@@ -184,7 +184,7 @@ for(sim in 1:nSims){
                                            phiA.proj[,3,2*t]*(1-epsA[,2])) 
       
       #new and old movers - intermediate class - last period's 24-mo old and 36-mo+ old residents survive and start moving but stay in state AND last period's 24-mo old and 36-mo+ old movers continue moving but stay in state
-      N.movers.newmove.proj[,3,1,t+1,s] <- rbinom(nSamples, N.proj[,2,2,t,s] + N.proj[,3,2,t,s], phiA.proj[,3,2*t]*epsA[,2]*alpha ) #formerly sum(N.proj[,2,2,t,]) + sum(N.proj[,3,2,t,])
+      N.movers.newmove.proj[,3,1,t+1,s] <- rbinom(nSamples, N.proj[,2,2,t,s] + N.proj[,3,2,t,s], phiA.proj[,3,2*t]*epsA[,2]*alpha ) 
       N.movers.oldmove.proj[,3,1,t+1,s] <- rbinom(nSamples, N.movers.proj[,2,2,t,s]+ N.movers.proj[,3,2,t,s], phiB.proj[,3,2*t]*epsB[,2]*alpha )
       N.movers.proj[,3,1,t+1,s] <- N.movers.newmove.proj[,3,1,t+1,s] + N.movers.oldmove.proj[,3,1,t+1,s]
       
@@ -227,8 +227,9 @@ for(sim in 1:nSims){
       #which ids are occupied?
       immig_id <- which(N.proj[i,1,1,t+1,] + N.stayers.proj[i,2,1,t+1,] + N.stayers.proj[i,3,1,t+1,] +
                           new.guys[[1]][i,] + new.guys[[2]][i,] >0)
-      #keeps total number of immigrants entering each year same as in data collection period
-      lambda.immig.t <- lambda.immig[i] * (17.6667/length(immig_id))
+      
+      #keeps total number of immigrants entering each year to the asymptote from the growth model (ie, limits immigration so it doesn't grow with increasing # of packs)
+      lambda.immig.t <- lambda.immig[i]*(assmp.immig/length(immig_id))
       
       for(s in immig_id){
         Tot.immig.proj[i,1,t+1,s] <- rpois(1, lambda.immig.t) #no .proj bc taken from data model
@@ -264,9 +265,9 @@ for(sim in 1:nSims){
     
     ##ATTRACTION FUNCTION HERE
     n.wolves.solo.fxn <- array(NA,dim = c(nSamples,3,224))
-
+    
     n.wolves.solo.fxn <- N.proj[,,1,t+1,] #just getting nSamples x 3 x site
-
+    
     #solo function
     group.neighbors <- get.solos(n.wolves.solo.fxn, neighbor_list)
     
@@ -330,7 +331,7 @@ for(sim in 1:nSims){
     
     n.res <- array(NA,dim = c(nSamples,224))
     n.res <- N.stayers.proj[,1,2,t+1,] + N.stayers.proj[,2,2,t+1,] + N.stayers.proj[,3,2,t+1,]
-
+    
     new.guys <- get.move(n.settlers.for.fxn,n.res,site_check,array_probs,array_siteID)  
     
     ##### WE CAN ADD IMMIGRANTS HERE FOR JUNE
@@ -339,8 +340,9 @@ for(sim in 1:nSims){
       #which ids are occupied?
       immig_id <- which(N.stayers.proj[i,1,2,t+1,] + N.stayers.proj[i,2,2,t+1,] + N.stayers.proj[i,3,2,t+1,]+
                           new.guys[[1]][i,] + new.guys[[2]][i,] >0)
-      #keeps total number of immigrants entering each year same as in data collection period
-      lambda.immig.t <- lambda.immig[i] * (17.6667/length(immig_id))
+      
+      #keeps total number of immigrants entering each year to the asymptote from the growth model (ie, limits immigration so it doesn't grow with increasing # of packs)
+      lambda.immig.t <- lambda.immig[i]*(assmp.immig/length(immig_id))
       
       for(s in immig_id){
         Tot.immig.proj[i,2,t+1,s] <- rpois(1, lambda.immig.t) #no .proj bc taken from data model
@@ -384,12 +386,12 @@ for(sim in 1:nSims){
       NSite_EWash.proj[i,t] <- length(which((N.proj[i,2,1,t,EWash] + N.proj[i,3,1,t,EWash]>=2) & N.proj[i,1,1,t,EWash]>=2))
       NSite_NCasc.proj[i,t] <- length(which((N.proj[i,2,1,t,NorthCasc] + N.proj[i,3,1,t,NorthCasc]>=2) & N.proj[i,1,1,t,NorthCasc]>=2))
       NSite_SCasc.proj[i,t] <- length(which((N.proj[i,2,1,t,SouthCasc] + N.proj[i,3,1,t,SouthCasc]>=2) & N.proj[i,1,1,t,SouthCasc]>=2))
-    for(s in 1:S){
-      N_newguys.proj[i,t,s] <- sum(newguys[i,,t,s])
-      BP_presence.proj[i,t,s] <- ifelse(N.proj[i,2,1,t,s] + N.proj[i,3,1,t,s]>=2 & N.proj[i,1,1,t,s]>=2,1,0)
-      Two_Adult.proj[i,t,s] <- ifelse(N.proj[i,2,1,t,s] + N.proj[i,3,1,t,s]>=2,1,0)
-      Pack_Size.proj[i,t,s] <- N.proj[i,1,1,t,s] + N.proj[i,2,1,t,s] + N.proj[i,3,1,t,s]
-    }}}
+      for(s in 1:S){
+        N_newguys.proj[i,t,s] <- sum(newguys[i,,t,s])
+        BP_presence.proj[i,t,s] <- ifelse(N.proj[i,2,1,t,s] + N.proj[i,3,1,t,s]>=2 & N.proj[i,1,1,t,s]>=2,1,0)
+        Two_Adult.proj[i,t,s] <- ifelse(N.proj[i,2,1,t,s] + N.proj[i,3,1,t,s]>=2,1,0)
+        Pack_Size.proj[i,t,s] <- N.proj[i,1,1,t,s] + N.proj[i,2,1,t,s] + N.proj[i,3,1,t,s]
+      }}}
   
   #growth rate over the whole study period
   lambda.proj <- matrix(NA, nrow=nSamples, ncol=proj-1)  
@@ -400,9 +402,9 @@ for(sim in 1:nSims){
     # we need the Infs to become NAs
     lambda.proj[,t-1][is.infinite(lambda.proj[,t-1])] <- NA                   
     lambda.proj[,t-1][is.nan(lambda.proj[,t-1])] <- NA                   
- } #closes t on lambda
+  } #closes t on lambda
   
-
+  
   #### derive and store values for each simulation
   Lambda.mean[1:nSamples,,sim] <- as.matrix(lambda.proj)
   Nglobal_state.mean[1:nSamples,,sim] <- as.matrix(Nglobal_state.proj)
@@ -420,7 +422,10 @@ for(sim in 1:nSims){
   BP_Presence[,,,sim] <- as.array(BP_presence.proj)
   Two_Adult[,,,sim] <- as.array(Two_Adult.proj)
   Pack_Size[,,,sim] <- as.array(Pack_Size.proj)
+  
 } #close sim
+
+
 
 dim(BP_Presence)
 #this will give max pack size across x samples
