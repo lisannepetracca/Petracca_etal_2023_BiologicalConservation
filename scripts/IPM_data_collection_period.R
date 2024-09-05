@@ -1,10 +1,10 @@
+
 #---
 #"Wolf IPM for Washington State"
 #"Lisanne Petracca"
 #"November 2023"
 #---
 
-library(jagsUI)
 
 #This is an IPM model for wolves in WA State that incorporates three different components: 
 # (1) abundance (end-of-year counts -- minimum counts from winter aerial surveys)
@@ -446,18 +446,21 @@ for(t in 1:(surv.periods)){
 sink()
 
 
+
+set.seed(130)
+
 win.data <- list(sites=sites, years=years, periods=periods, G=G,
-                  firstyear=firstyear, 
-                  morethanone=morethanone, removals=removal_array,
-                  terr_missing=terr_missing, yr_missing=yr_missing, occasions_missing=occasions_missing,
-                  first = first, last = last, 
-                  age=age, firstyear_morethanone=firstyear_morethanone,
-                  y = surv.history, nhist = nrow(surv.history),
-                  surv.periods=23, #we are technically adding a period here, to estimate survival from dec to june in final year
-                  N_singlesonly_plusone_log=N_singlesonly_plusone_log, pup_count_EOY_plusone=pup_count_EOY_plusone,
-                  stableAge=stableAge, probImmig=probImmig,
-                  alpha_dirichlet=alpha_dirichlet, sites_per_year=sites_per_year,
-                  settle_reps=settle_reps)
+                 firstyear=firstyear, 
+                 morethanone=morethanone, removals=removal_array,
+                 terr_missing=terr_missing, yr_missing=yr_missing, occasions_missing=occasions_missing,
+                 first = first, last = last, 
+                 age=age, firstyear_morethanone=firstyear_morethanone,
+                 y = surv.history, nhist = nrow(surv.history),
+                 surv.periods=23, #we are technically adding a period here, to estimate survival from dec to june in final year
+                 N_singlesonly_plusone_log=N_singlesonly_plusone_log, pup_count_EOY_plusone=pup_count_EOY_plusone,
+                 stableAge=stableAge, probImmig=probImmig,
+                 alpha_dirichlet=alpha_dirichlet, sites_per_year=sites_per_year,
+                 settle_reps=settle_reps)
 
 
 #provide initial values
@@ -471,9 +474,9 @@ inits <- function(){list(
   sigma.period = runif(1), 
   eps.period = runif(23,0,1))}
 
-nb <- 120000 #100000 #100 #30000 #1000 #2000 #15000 #change iterations to low, burn in low, spit out
-ni <- 240000 #300000 #1000 #150000 #100 #2000 #10000 #40000  
-nt <- 6 #10 #3
+nb <- 120000 #100000 #This will take about 20-30 minutes to run on a faster machine
+ni <- 240000 #300000 
+nt <- 6  #3
 nc <- 3
 
 # Parameters to estimate
@@ -488,8 +491,8 @@ params <- c(  "Nglobal", "Nglobal_wmove",
               "mu.phiA", "mu.phiB", "epsA", "epsB", "alpha",
               "int.surv1", "int.surv2", "eps.period", "sigma.period", "phiA", "phiB")
 
-out <- jags(win.data, inits, params, "wolf_jags.txt", n.adapt=100, n.chains=nc, n.iter=ni, n.burn = nb, n.thin=nt, parallel=T)
-print(out,n=3)
+out <- jags(win.data, inits, params, "wolf_jags.txt", n.adapt=1000, n.chains=nc, n.iter=ni, n.burn = nb, n.thin=nt, parallel=T)
+
 
 write.csv(as.mcmc(out$summary),"IPM_output.csv")
 saveRDS(out, file = "IPM_output.rds")
