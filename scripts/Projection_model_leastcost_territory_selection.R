@@ -21,13 +21,10 @@ source("functions/attraction_function.R")
 #reading in spatial stuff from projection
 load("data/Spatial_Information.RData")
 
-#reading in arrays needed for projection (incl. first year data)
-load("data/Projection_Inputs.RData")
-
 #fixed values 
 proj <- 51 #100 #years of projection
 nSims <- 100 #number of simulations per sample from the posterior
-nSamples <- 500 #number of samples from the posterior, this has to be set to 500 based on input files
+nSamples <- 500 #number of samples from the posterior 
 S <- 224 #territories
 
 #setting up for new.guys array
@@ -36,8 +33,7 @@ newguys <- array(0, dim=c(nSamples,2,proj,S))
 ####### BASELINE SCENARIO ######
 
 analysis <- "baseline"
-#scenario 1 : baseline: removal rate at annual mean (0.03718274), immigration as estimated, no harvest, no translocation, no disease
-removal_rate <- 0.03718274
+#scenario 1 : baseline: removal rate at annual mean, immigration as estimated, no harvest, no translocation, no disease
 
 ####### THIS IS WHERE PROJECTION MODEL CODE BEGINS ######
 
@@ -50,6 +46,9 @@ BP_Presence <- Pack_Size <- Ntot.site <- Newguys.mean <- Two_Adult <- array(NA, 
 lambda.mean <- lambda.upper <- lambda.lower <- p.quasiext <- p.recovery <- numeric(nSims)
 
 for(sim in 1:nSims){
+  
+  #reading in arrays needed for projection (incl. first year data)
+  load("data/Projection_Inputs.RData")
   
   set.seed(37585+sim)
   
@@ -94,7 +93,7 @@ for(sim in 1:nSims){
     N.stayers.proj[,3,2,1,s] <- rbinom(nSamples,  N.proj[,3,1,1,s], phiA.proj[,3,1]*(1-epsA[,2]))
     #new movers - intermediate class - last period's 30-mo+ old residents survive and start moving but stay in state AND last period's 30-mo+ old movers continue moving but stay in state 
     #all 1 here bc same year
-    N.movers.newmove.proj[,3,2,1,s] <- rbinom(nSamples, N.proj[,3,1,1,s], phiA.proj[,3,1]*epsA[,2]*alpha) #formerly sum(N.proj[,3,1,t,])
+    N.movers.newmove.proj[,3,2,1,s] <- rbinom(nSamples, N.proj[,3,1,1,s], phiA.proj[,3,1]*epsA[,2]*alpha) 
     N.movers.oldmove.proj[,3,2,1,s] <- rbinom(nSamples, N.movers.proj[,3,1,1,s], phiB.proj[,3,1]*epsB[,2]*alpha)
     N.movers.proj[,3,2,1,s] <- N.movers.newmove.proj[,3,2,1,s] + N.movers.oldmove.proj[,3,2,1,s]
     #settlers - intermediate class - last period's 30-mo+ old movers settle at s  
@@ -120,8 +119,8 @@ for(sim in 1:nSims){
     #which ids are occupied?
     immig_id <- which(N.stayers.proj[i,1,2,1,] + N.stayers.proj[i,2,2,1,] + N.stayers.proj[i,3,2,1,]+
                         new.guys[[1]][i,] + new.guys[[2]][i,] >0)
-    #keeps total number of immigrants entering each year same as in data collection period
-    lambda.immig.t <- lambda.immig[i] * (17.6667/length(immig_id))
+    #keeps total number of immigrants entering each year to the asymptote from the growth model (ie, limits immigration so it doesn't grow with increasing # of packs)
+    lambda.immig.t <- lambda.immig[i]*(assmp.immig/length(immig_id))
     
     for(s in immig_id){
       
@@ -131,7 +130,7 @@ for(sim in 1:nSims){
       #12-23.99 mo old class is the first class that can immigrate
       N.immig.proj[i,2,2,1,s] <- rbinom(1, Tot.immig.proj[i,2,1,s], probImmig[1])
       # group G: deterministic
-      N.immig.proj[i,3,2,1,s] <- Tot.immig.proj[i,2,1,s] - N.immig.proj[i,1,2,1,s]
+      N.immig.proj[i,3,2,1,s] <- Tot.immig.proj[i,2,1,s] - N.immig.proj[i,2,2,1,s]
     }}
   
   N.proj[,1,2,1,] <- N.stayers.proj[,1,2,1,]
@@ -166,7 +165,7 @@ for(sim in 1:nSims){
       
       #last periods 12-mo olds survive, initiate movement, but stay in state
       #new lines June 2022
-      N.movers.newmove.proj[,2,1,t+1,s] <- rbinom(nSamples, N.proj[,1,2,t,s], phiA.proj[,2,2*t]*epsA[,1]*alpha ) #formerly sum(N.proj[,2,2,t,]) + sum(N.proj[,3,2,t,])
+      N.movers.newmove.proj[,2,1,t+1,s] <- rbinom(nSamples, N.proj[,1,2,t,s], phiA.proj[,2,2*t]*epsA[,1]*alpha ) 
       N.movers.oldmove.proj[,2,1,t+1,s] <- rbinom(nSamples, N.movers.proj[,1,2,t,s], phiB.proj[,2,2*t]*epsB[,1]*alpha )
       N.movers.proj[,2,1,t+1,s] <- N.movers.newmove.proj[,2,1,t+1,s] + N.movers.oldmove.proj[,2,1,t+1,s]
       
@@ -183,7 +182,7 @@ for(sim in 1:nSims){
                                            phiA.proj[,3,2*t]*(1-epsA[,2])) 
       
       #new and old movers - intermediate class - last period's 24-mo old and 36-mo+ old residents survive and start moving but stay in state AND last period's 24-mo old and 36-mo+ old movers continue moving but stay in state
-      N.movers.newmove.proj[,3,1,t+1,s] <- rbinom(nSamples, N.proj[,2,2,t,s] + N.proj[,3,2,t,s], phiA.proj[,3,2*t]*epsA[,2]*alpha ) #formerly sum(N.proj[,2,2,t,]) + sum(N.proj[,3,2,t,])
+      N.movers.newmove.proj[,3,1,t+1,s] <- rbinom(nSamples, N.proj[,2,2,t,s] + N.proj[,3,2,t,s], phiA.proj[,3,2*t]*epsA[,2]*alpha ) 
       N.movers.oldmove.proj[,3,1,t+1,s] <- rbinom(nSamples, N.movers.proj[,2,2,t,s]+ N.movers.proj[,3,2,t,s], phiB.proj[,3,2*t]*epsB[,2]*alpha )
       N.movers.proj[,3,1,t+1,s] <- N.movers.newmove.proj[,3,1,t+1,s] + N.movers.oldmove.proj[,3,1,t+1,s]
       
@@ -223,8 +222,9 @@ for(sim in 1:nSims){
       #which ids are occupied?
       immig_id <- which(N.proj[i,1,1,t+1,] + N.stayers.proj[i,2,1,t+1,] + N.stayers.proj[i,3,1,t+1,] +
                           new.guys[[1]][i,] + new.guys[[2]][i,] >0)
-      #keeps total number of immigrants entering each year same as in data collection period
-      lambda.immig.t <- lambda.immig[i] * (17.6667/length(immig_id))
+      
+      #keeps total number of immigrants entering each year to the asymptote from the growth model (ie, limits immigration so it doesn't grow with increasing # of packs)
+      lambda.immig.t <- lambda.immig[i]*(assmp.immig/length(immig_id))
       
       for(s in immig_id){
         Tot.immig.proj[i,1,t+1,s] <- rpois(1, lambda.immig.t) #no .proj bc taken from data model
@@ -293,7 +293,7 @@ for(sim in 1:nSims){
       #new and old movers - intermediate class - last period's 18-mo old residents survive and start moving but stay in state AND last period's 18-mo old movers continue moving but stay in state 
       #all are t+1 here because from same year
       
-      N.movers.newmove.proj[,2,2,t+1,s] <- rbinom(nSamples, N.proj[,2,1,t+1,s], phiA.proj[,2,(2*t+1)]*epsA[,1]*alpha) #formerly sum(N.proj[,2,1,t+1,])
+      N.movers.newmove.proj[,2,2,t+1,s] <- rbinom(nSamples, N.proj[,2,1,t+1,s], phiA.proj[,2,(2*t+1)]*epsA[,1]*alpha) 
       N.movers.oldmove.proj[,2,2,t+1,s] <- rbinom(nSamples, N.movers.proj[,2,1,t+1,s], phiB.proj[,2,(2*t+1)]*epsB[,1]*alpha) 
       N.movers.proj[,2,2,t+1,s] <- N.movers.newmove.proj[,2,2,t+1,s] + N.movers.oldmove.proj[,2,2,t+1,s]
       
@@ -309,7 +309,7 @@ for(sim in 1:nSims){
       
       #new movers - intermediate class - last period's 30-mo+ old residents survive and start moving but stay in state AND last period's 30-mo+ old movers continue moving but stay in state 
       #all t+1 here bc same year
-      N.movers.newmove.proj[,3,2,t+1,s] <- rbinom(nSamples, N.proj[,3,1,t+1,s], phiA.proj[,3,(2*t+1)]*epsA[,2]*alpha) #formerly sum(N.proj[,3,1,t,])
+      N.movers.newmove.proj[,3,2,t+1,s] <- rbinom(nSamples, N.proj[,3,1,t+1,s], phiA.proj[,3,(2*t+1)]*epsA[,2]*alpha) 
       N.movers.oldmove.proj[,3,2,t+1,s] <- rbinom(nSamples, N.movers.proj[,3,1,t+1,s], phiB.proj[,3,(2*t+1)]*epsB[,2]*alpha)
       N.movers.proj[,3,2,t+1,s] <- N.movers.newmove.proj[,3,2,t+1,s] + N.movers.oldmove.proj[,3,2,t+1,s]
       
@@ -336,8 +336,8 @@ for(sim in 1:nSims){
       #which ids are occupied?
       immig_id <- which(N.stayers.proj[i,1,2,t+1,] + N.stayers.proj[i,2,2,t+1,] + N.stayers.proj[i,3,2,t+1,]+
                           new.guys[[1]][i,] + new.guys[[2]][i,] >0)
-      #keeps total number of immigrants entering each year same as in data collection period
-      lambda.immig.t <- lambda.immig[i] * (17.6667/length(immig_id))
+      #keeps total number of immigrants entering each year to the asymptote from the growth model (ie, limits immigration so it doesn't grow with increasing # of packs)
+      lambda.immig.t <- lambda.immig[i]*(assmp.immig/length(immig_id))
       
       for(s in immig_id){
         Tot.immig.proj[i,2,t+1,s] <- rpois(1, lambda.immig.t) #no .proj bc taken from data model
@@ -397,7 +397,7 @@ for(sim in 1:nSims){
     # we need the Infs to become NAs
     lambda.proj[,t-1][is.infinite(lambda.proj[,t-1])] <- NA                   
     lambda.proj[,t-1][is.nan(lambda.proj[,t-1])] <- NA                   
- } #closes t on lambda
+  } #closes t on lambda
   
   #### derive and store values for each simulation
   
@@ -436,4 +436,4 @@ save(Lambda.mean,
      Nglobal_state.mean, Nglobal_state_wmove.mean,
      NAdult_state.mean, 
      NAdult_EWash.mean, NAdult_NCasc.mean, NAdult_SCasc.mean, Newguys.mean,
-     NSite_state.mean, NSite_EWash.mean, NSite_NCasc.mean, NSite_SCasc.mean, file     ="baseline_leastcost.RData")
+     NSite_state.mean, NSite_EWash.mean, NSite_NCasc.mean, NSite_SCasc.mean, file="baseline_leastcost.RData")  
