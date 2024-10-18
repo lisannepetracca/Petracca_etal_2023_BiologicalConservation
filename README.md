@@ -19,7 +19,7 @@ The ["Bonus_Model_Formulation_with_Many_Ages" folder](./functions/Bonus_Model_Fo
 Data files used to run the models in this paper are found in the [data](./data) folder. Please see [here](./data/a_DESCRIPTION.txt) for more information.
 
 ## Updates - June 20, 2024
-The scripts in this folder are the most recent, as reflected in the Corrigendum to our 2024 paper (https://www.sciencedirect.com/science/article/pii/S0006320724001952). We also fixed an additional index, whereby the impact of this correction (e.g., about one wolf after 50 years) was much smaller than simulation error. 
+The scripts as of the above date reflect the Corrigendum to our 2024 paper (https://www.sciencedirect.com/science/article/pii/S0006320724001952). We also fixed an additional index, whereby the impact of this correction (e.g., about one wolf after 50 years) was much smaller than simulation error. 
 
 ## Updates - September 1, 2024 
 We identified an error in the coding of out-of-state immigration in the baseline projection model. We updated the code, and also improved the estimation of immigration to better capture wolf population dynamics.  
